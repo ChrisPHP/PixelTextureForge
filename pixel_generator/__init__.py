@@ -5,10 +5,6 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.cluster import KMeans
 
 class PixelGenerator:
-    def __init__(self, num_colors, pixel_size):
-        self.num_colors = num_colors
-        self.pixel_size = pixel_size
-
     def floyd_steinberg_dithering(self, img):
         img_array = np.array(img, dtype=float) / 255
         height, width, _ = img_array.shape
@@ -31,12 +27,17 @@ class PixelGenerator:
         # Convert back to 0-255 range and uint8 data type
         return Image.fromarray((img_array * 255).astype(np.uint8))
 
-    def nearest_neighbour_method(self, img):
+
+    def generate_seamless_texture(self, img):
+        result_image = image_to_seamless(img, overlap=0.1)
+        return result_image
+
+    def nearest_neighbour_method(self, img, pixel_size):
         img_array = np.array(img)
         height, width, _ = img_array.shape
 
-        x = np.arange(0, width, self.pixel_size)
-        y = np.arange(0, height, self.pixel_size)
+        x = np.arange(0, width, pixel_size)
+        y = np.arange(0, height, pixel_size)
         xx, yy = np.meshgrid(x, y)
         pixel_centers = np.c_[xx.ravel(), yy.ravel()]
 
@@ -50,19 +51,19 @@ class PixelGenerator:
         return Image.fromarray(pixelated.astype('uint8'))
 
 
-    def process_image(self, img):
+    def process_image(self, img, num_colours, pixel_size):
         img = img.convert('RGB')
         width, height = img.size
 
-        new_width = width - (width % self.pixel_size)
-        new_height = height - (height % self.pixel_size)
+        new_width = width - (width % pixel_size)
+        new_height = height - (height % pixel_size)
         img = img.resize((new_width, new_height))
 
         img_array = np.array(img)
 
         pixels = img_array.reshape((-1,3))
 
-        kmeans = KMeans(n_clusters=self.num_colors, random_state=42)
+        kmeans = KMeans(n_clusters=num_colours, random_state=42)
         kmeans.fit(pixels)
 
         colours = kmeans.cluster_centers_.astype(int)
@@ -72,11 +73,11 @@ class PixelGenerator:
 
         quantized = quantized.reshape(img_array.shape)
 
-        for i in range(0, new_height, self.pixel_size):
-            for j in range(0, new_width, self.pixel_size):
-                block = quantized[i:i+self.pixel_size, j:j+self.pixel_size]
+        for i in range(0, new_height, pixel_size):
+            for j in range(0, new_width, pixel_size):
+                block = quantized[i:i+pixel_size, j:j+pixel_size]
                 avg_colour = np.mean(block, axis=(0,1)).astype(int)
-                quantized[i:i+self.pixel_size, j:j+self.pixel_size] = avg_colour
+                quantized[i:i+pixel_size, j:j+pixel_size] = avg_colour
 
 
         return Image.fromarray(quantized.astype('uint8'))

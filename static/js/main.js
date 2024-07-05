@@ -45,4 +45,31 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
     });
+
+
+    document.getElementById("seamlessButton").addEventListener('click', function(event) {
+        if (selectedFile) {
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+
+            fetch('/seamless', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(blob);
+                img.id = 'uploadedImage';
+                const container = document.getElementById('outputImage');
+                container.innerHTML = ''; // Clear previous image
+                container.appendChild(img);
+                //document.getElementById('outputImage').textContent = 'Image uploaded and displayed successfully!';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('outputImage').textContent = 'An error occurred during upload.';
+            });
+        }
+    });
 });
