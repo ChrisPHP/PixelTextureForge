@@ -1,0 +1,22 @@
+.layout {
+    display: flex;
+}
+.sidebar {
+    width: 15%;
+    background-color: #f4f4f4;
+    padding: 20px;
+    height: 100%;
+}
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+.header {
+    background-color: #333;
+    color: white;
+    padding: 1em;
+}
+#uploadedImage {
+    max-width: 100%;
+    margin-top: 20px;
+}
