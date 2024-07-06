@@ -16,12 +16,14 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
+pixel_gen = pixel_generator.PixelGenerator()
+
 @app.route('/')
 def home():
     return render_template('index.html', title='Pixelize')
 
 @app.route('/seamless', methods=['POST'])
-def seamless_generate():
+def best_tiles():
     if 'image' not in request.files:
         return 'No file part in the request', 400
     file = request.files['image']
@@ -33,12 +35,16 @@ def seamless_generate():
         file.save(file_path)
         img = Image.open(file_path)
 
-        pixel_gen = pixel_generator.PixelGenerator()
+        if 'use_best' not in request.form:
+            tile_width = int(request.form['tile_width'])
+            tile_height = int(request.form['tile_height'])
 
-        new_img = pixel_gen.generate_seamless_texture(img)
+            new_img = pixel_gen.get_seamless_tile(img,[tile_width,tile_height])
+        else:
+            new_img = pixel_gen.generate_seamless_texture(img)
+
         new_img.save(app.config['OUTPUT_FOLDER']+'/'+filename)
         return send_file(app.config['OUTPUT_FOLDER']+'/'+filename, mimetype='image/png') 
-
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -55,8 +61,6 @@ def upload_file():
 
         pixel_size = int(request.form['pixel_size'])
         num_colours = int(request.form['num_colours'])
-
-        pixel_gen = pixel_generator.PixelGenerator()
 
         new_img = pixel_gen.process_image(img, num_colours, pixel_size)
         #new_img = pixel_gen.nearest_neighbour_method(new_img)

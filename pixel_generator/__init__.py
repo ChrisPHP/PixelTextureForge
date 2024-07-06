@@ -5,28 +5,43 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.cluster import KMeans
 
 class PixelGenerator:
-    def floyd_steinberg_dithering(self, img):
-        img_array = np.array(img, dtype=float) / 255
-        height, width, _ = img_array.shape
-        for y in range(height):
-            for x in range(width):
-                old_pixel = img_array[y, x]
-                new_pixel = np.round(old_pixel)
-                img_array[y, x] = new_pixel
-                error = old_pixel - new_pixel
+    def score_seamlessness(self, region):
+        left_edge = region[:, 0]
+        right_edge = region[:, -1]
+        top_edge = region[0, :]
+        bottom_edge = region[-1, :]
 
-                if x + 1 < width:
-                    img_array[y, x + 1] += error * 7/16
-                if (y + 1 < height) and (x > 0):
-                    img_array[y + 1, x - 1] += error * 3/16
-                if y + 1 < height:
-                    img_array[y + 1, x] += error * 5/16
-                if (y + 1 < height) and (x + 1 < width):
-                    img_array[y + 1, x + 1] += error * 1/16
+        vertical_diff = np.sum(np.abs(left_edge - right_edge))
+        horizontal_diff = np.sum(np.abs(top_edge - bottom_edge))
+        
+        return vertical_diff + horizontal_diff
 
-        # Convert back to 0-255 range and uint8 data type
-        return Image.fromarray((img_array * 255).astype(np.uint8))
+    def find_best_tile(self, img, tile_size):
+        height, width = img.shape[:2]
+        best_score = float('inf')
+        best_position = (0, 0)
 
+        for y in range(height - tile_size[1]):
+            for x in range(width - tile_size[0]):
+                region = img[y:y+tile_size[1], x:x+tile_size[0]]
+                score = self.score_seamlessness(region)
+                
+                if score < best_score:
+                    best_score = score
+                best_position = (x, y)
+    
+        return best_position
+        
+
+    def get_seamless_tile(self, img, tile_size):
+        img = np.array(img)
+        best_position = self.find_best_tile(img, tile_size)
+
+        x,y = best_position
+        tile = img[y:y+tile_size[1], x:x+tile_size[0]]
+        new_img =  self.generate_seamless_texture(Image.fromarray(tile.astype('uint8')))
+
+        return new_img
 
     def generate_seamless_texture(self, img):
         result_image = image_to_seamless(img, overlap=0.1)

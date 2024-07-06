@@ -10,13 +10,36 @@
 .content {
     flex-grow: 1;
     padding: 20px;
+    max-width: 100%;
 }
 .header {
     background-color: #333;
     color: white;
     padding: 1em;
 }
+.image-placeholder {
+    padding-top: 2%;
+    max-height: 80%;
+}
+
 #uploadedImage {
     max-width: 100%;
-    margin-top: 20px;
 }
+
+#outputImage {
+    max-width: 100%;
+    padding-left: 2%;
+}
+
+.responsive-img {
+    width: 100%;
+    height: auto;
+  }
+
+  #pixel-sidebar {
+    display: block;
+  }
+
+  #seamless-sidebar {
+    display: none;
+  }
