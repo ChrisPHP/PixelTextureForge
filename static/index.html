@@ -21,7 +21,7 @@
                     <a href="#" id="pixel-menu-open" class="pure-menu-link">Pixelize Image</a>
                 </li>
                 <li class="pure-menu-item">
-                    <a href="#" id="" class="pure-menu-link">Procedural Texture</a>
+                    <a href="#" id="procedural-menu-open" class="pure-menu-link">Procedural Texture</a>
                 </li>
                 <li class="pure-menu-item">
                     <a href="#" id="seamless-menu-open" class="pure-menu-link">Convert to Seamless</a>
@@ -43,6 +43,32 @@
                     <li class="pure-menu-item">
                         <p>Pixel Size:</p>
                         <input type="number" id="pixelSize" name="pixelSize" value="8" min="1" max="255">
+                    </li>
+                    <h2>Scale down image</h2>
+                    <button id="scaleDown" class="pure-button pure-button-primary">Scale Down</button>
+                </div>
+                <div id="procedural-sidebar">
+                    <h2>Generate Texture</h2>
+                    <button id="generateNoise" class="pure-button pure-button-primary">Generate Noise</button>
+                    <li class="pure-menu-item">
+                        <p>Frequency:</p>
+                        <input type="number" id="baseFrequency" name="baseFrequency" value="0.5" max="100">
+                    </li>
+                    <li class="pure-menu-item">
+                        <p>Cell Size:</p>
+                        <input type="number" id="cellSize" name="cellSize" value="2" min="1" max="100">
+                    </li>
+                    <li class="pure-menu-item">
+                        <p>Octaves:</p>
+                        <input type="number" id="noiseOctaves" name="noiseOctaves" value="2" min="1" max="100">
+                    </li>
+                    <li class="pure-menu-item">
+                        <p>Persistance:</p>
+                        <input type="number" id="noisePersistance" name="noisePersistance" value="0.5" max="100">
+                    </li>
+                    <li class="pure-menu-item">
+                        <p>Lacunarity:</p>
+                        <input type="number" id="noiseLacunarity" name="noiseLacunarity" value="2.0" max="100">
                     </li>
                 </div>
                 <div id="seamless-sidebar">

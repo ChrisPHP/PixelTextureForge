@@ -4,11 +4,19 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('seamless-menu-open').addEventListener('click', function() {
         document.getElementById('seamless-sidebar').style.display = "block";
         document.getElementById('pixel-sidebar').style.display = 'none';
+        document.getElementById('procedural-sidebar').style.display = 'none';
     });
 
     document.getElementById('pixel-menu-open').addEventListener('click', function() {
         document.getElementById('seamless-sidebar').style.display = "none";
         document.getElementById('pixel-sidebar').style.display = 'block';
+        document.getElementById('procedural-sidebar').style.display = 'none';
+    });
+
+    document.getElementById('procedural-menu-open').addEventListener('click', function() {
+        document.getElementById('seamless-sidebar').style.display = "none";
+        document.getElementById('pixel-sidebar').style.display = 'none';
+        document.getElementById('procedural-sidebar').style.display = 'block';
     });
 
     let selectedFile = null
@@ -78,6 +86,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    document.getElementById('generateNoise').addEventListener('click', function(event) {
+        const formData = new FormData();
+        formData.append('test', "data be here");
+
+        fetch_command('/procedural', formData);
+    });
+
+    document.getElementById('scaleDown').addEventListener('click', function(event) {
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+        formData.append('pixel_size', document.getElementById('pixelSize').value)
+
+        fetch_command('/nearest_neighbour', formData);
+    });
+
 
     function fetch_command(route_name, formData) {
         fetch(route_name, {
@@ -86,7 +109,11 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(response => response.blob())
         .then(blob => {
-            outputFile = new File([blob], selectedFile.name)
+            if (selectedFile) {
+                outputFile = new File([blob], selectedFile.name);
+            } else {
+                outputFile = new File([blob], 'noise.png');
+            }
             file_reader(outputFile, 'uploadedImage', 'outputImage')
         })
         .catch(error => {
