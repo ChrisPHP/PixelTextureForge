@@ -49,8 +49,10 @@ def best_tiles():
             tile_height = int(request.form['tile_height'])
 
             new_img = pixel_gen.get_seamless_tile(img,[tile_width,tile_height])
+            new_img = new_img.resize((tile_width, tile_height), Image.Resampling.NEAREST)
         else:
             new_img = pixel_gen.generate_seamless_texture(img)
+            new_img = new_img.resize((img.width, img.height), Image.Resampling.NEAREST)
 
         new_img.save(app.config['OUTPUT_FOLDER']+'/'+filename)
         return send_file(app.config['OUTPUT_FOLDER']+'/'+filename, mimetype='image/png') 
