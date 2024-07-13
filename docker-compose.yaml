@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pixelcraft
+    expose:
+      - 5000
+    network_mode: "host"
