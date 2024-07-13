@@ -26,7 +26,13 @@ def home():
 
 @app.route('/procedural',  methods=['POST'])
 def procedural_texture():
-    new_img = proc_tex.generate_noise()
+    base_frequency = float(request.form['base_frequency'])
+    cell_size = int(request.form['cell_size'])
+    noise_octaves = int(request.form['noise_octaves'])
+    noise_persistance = float(request.form['noise_persistance'])
+    noise_lacunarity = float(request.form['noise_lacunarity'])
+
+    new_img = proc_tex.generate_noise(base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
     new_img.save(app.config['OUTPUT_FOLDER']+'/noise.png')
     return send_file(app.config['OUTPUT_FOLDER']+'/noise.png', mimetype='image/png') 
 

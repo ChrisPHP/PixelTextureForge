@@ -22,7 +22,7 @@ class ProceduralTextures:
 
         return totalNoise / maxValue
 
-    def generate_noise(self):
+    def generate_noise(self, baseFrequency, cellSize, octaves, persistance, lacunarity):
         def normalize(arr):
             return (arr - arr.min()) / (arr.max() - arr.min())
 
@@ -39,7 +39,7 @@ class ProceduralTextures:
                 nz = np.cos(2 * np.pi * x / width) * scale
                 nw = np.cos(2 * np.pi * y / height) * scale
 
-                result[y, x] = self.improved_noise(0.5, 2, 10, 0.5, 2.0, [nx, ny, nz, nw])
+                result[y, x] = self.improved_noise(baseFrequency, cellSize, octaves, persistance, lacunarity, [nx, ny, nz, nw])
 
         noise_2d = normalize(result)
 
