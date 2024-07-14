@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let selectedFile = null
     let outputFile = null
+    let img_width, img_height = 0
 
     function file_reader(file, img_id, div_id) {
         const reader = new FileReader();
@@ -31,6 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const container = document.getElementById(div_id);
             container.innerHTML = ''; // Clear previous image
             container.appendChild(img);
+            img.onload = function() {
+                pixel_size = document.getElementById('pixelSize').value;
+                img_width = this.naturalWidth;
+                img_height = this.naturalHeight;
+                rounded_width = Math.round(img_width/pixel_size);
+                rounded_height = Math.round(img_height/pixel_size);
+                document.getElementById('dimensions-label').innerHTML = `${rounded_width}x${rounded_height}`;
+            }
         }
         reader.readAsDataURL(file);
     }
@@ -97,10 +106,22 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch_command('/procedural', formData);
     });
 
-    document.getElementById('scaleDown').addEventListener('click', function(event) {
+    document.getElementById('pixelSize').addEventListener('change', function(event) {
+        pixel_size = document.getElementById('pixelSize').value;
+        rounded_width = Math.round(img_width/pixel_size);
+        rounded_height = Math.round(img_height/pixel_size);
+        document.getElementById('dimensions-label').innerHTML = `${rounded_width}x${rounded_height}`;
+    });
+
+    document.getElementById('scaleDown').addEventListener('click', function(event) {        
+        pixel_size = document.getElementById('pixelSize').value;
+        rounded_width = Math.round(img_width/pixel_size);
+        rounded_height = Math.round(img_height/pixel_size);
+
         const formData = new FormData();
         formData.append('image', selectedFile);
-        formData.append('pixel_size', document.getElementById('pixelSize').value)
+        formData.append('width', rounded_width);
+        formData.append('height', rounded_height);
 
         fetch_command('/nearest_neighbour', formData);
     });

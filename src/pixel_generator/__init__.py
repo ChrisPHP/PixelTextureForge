@@ -47,25 +47,6 @@ class PixelGenerator:
         result_image = image_to_seamless(img, overlap=0.1)
         return result_image
 
-    def nearest_neighbour_method(self, img, pixel_size):
-        img_array = np.array(img)
-        height, width, _ = img_array.shape
-
-        x = np.arange(0, width, pixel_size)
-        y = np.arange(0, height, pixel_size)
-        xx, yy = np.meshgrid(x, y)
-        pixel_centers = np.c_[xx.ravel(), yy.ravel()]
-
-        pixels = img_array.reshape(-1, 3)
-        pixel_positions = np.array([(i % width, i // width) for i in range(len(pixels))])
-
-        nn = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(pixel_positions)
-        _, indices = nn.kneighbors(pixel_centers)
-
-        pixelated = pixels[indices].reshape(len(y), len(x), 3).astype(np.uint8)
-        return Image.fromarray(pixelated.astype('uint8'))
-
-
     def process_image(self, img, num_colours, pixel_size):
         img = img.convert('RGB')
         width, height = img.size

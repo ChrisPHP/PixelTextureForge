@@ -80,8 +80,6 @@ def upload_file():
         num_colours = int(request.form['num_colours'])
 
         new_img = pixel_gen.process_image(img, num_colours, pixel_size)
-        #new_img = pixel_gen.nearest_neighbour_method(new_img)
-        #new_file = pixel_gen.floyd_steinberg_dithering(file_path)
         new_img.save(app.config['OUTPUT_FOLDER']+'/'+filename)
         return send_file(app.config['OUTPUT_FOLDER']+'/'+filename, mimetype='image/png') 
 
@@ -98,11 +96,10 @@ def nearest_neighbour_resize():
         file.save(file_path)
         img = Image.open(file_path)
 
-        pixel_size = int(request.form['pixel_size'])
+        img_width = int(request.form['width'])
+        img_height = int(request.form['height'])
 
-        #new_img = pixel_gen.nearest_neighbour_method(img, pixel_size)
-
-        new_img = img.resize((32,32), Image.Resampling.NEAREST)
+        new_img = img.resize((img_width,img_height), Image.Resampling.NEAREST)
         new_img.save(app.config['OUTPUT_FOLDER']+'/'+filename)
         return send_file(app.config['OUTPUT_FOLDER']+'/'+filename, mimetype='image/png') 
 
