@@ -80,18 +80,38 @@ class PixelGenerator:
 
     def generate_wang_tile(self, img):
         img = img.convert('RGBA')
-        width, height = img.size
+        height, width = img.size
         img_array = np.array(img)
-        pixels = img_array.reshape((-1,4))
 
-
-        quantized = pixels.reshape(img_array.shape)
+        left = np.zeros((height, width, 4), dtype=np.uint8)
+        bottom = np.zeros((height, width, 4), dtype=np.uint8)
+        right = np.zeros((height, width, 4), dtype=np.uint8)
+        top = np.zeros((height, width, 4), dtype=np.uint8)
 
         for y in range(height):
             for x in range(width):
-                if y < width // 2:
-                    quantized[x, y] = img_array[x,y]
+                if y <= height // 2:
+                    left[x, y] = img_array[x,y]
                 else:
-                    quantized[x, y] = (0, 0, 0, 0)
+                    left[x, y] = (255, 255, 0, 255)
 
-        return Image.fromarray(quantized.astype('uint8'))
+                if x > width // 2:
+                    bottom[x, y] = img_array[x,y]
+                else:
+                    bottom[x, y] = (255, 255, 0, 255)
+                
+                if y >= height // 2:
+                    right[x, y] = img_array[x,y]
+                else:
+                    right[x, y] = (255, 255, 0, 255)
+
+                if y <= height // 2:
+                    top[x, y] = img_array[x,y]
+                else:
+                    top[x, y] = (255, 255, 0, 255) 
+
+        top_row = np.concatenate((left, bottom), axis=1)
+        bottom_row = np.concatenate((right, bottom), axis=1)
+        grid_image = np.concatenate((top_row, bottom_row), axis=0)
+
+        return Image.fromarray(top.astype('uint8'))
