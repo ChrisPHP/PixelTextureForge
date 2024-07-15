@@ -126,6 +126,13 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch_command('/nearest_neighbour', formData);
     });
 
+    document.getElementById('wangTiles').addEventListener('click', function(event) {        
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+
+        fetch_command('/wang_tiles', formData);
+    });
+
 
     function fetch_command(route_name, formData) {
         fetch(route_name, {

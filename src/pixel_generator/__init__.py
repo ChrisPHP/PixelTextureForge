@@ -48,7 +48,7 @@ class PixelGenerator:
         return result_image
 
     def process_image(self, img, num_colours, pixel_size):
-        img = img.convert('RGB')
+        img = img.convert('RGBA')
         width, height = img.size
 
         new_width = width - (width % pixel_size)
@@ -57,7 +57,7 @@ class PixelGenerator:
 
         img_array = np.array(img)
 
-        pixels = img_array.reshape((-1,3))
+        pixels = img_array.reshape((-1,4))
 
         kmeans = KMeans(n_clusters=num_colours, random_state=42)
         kmeans.fit(pixels)
@@ -75,5 +75,23 @@ class PixelGenerator:
                 avg_colour = np.mean(block, axis=(0,1)).astype(int)
                 quantized[i:i+pixel_size, j:j+pixel_size] = avg_colour
 
+        return Image.fromarray(quantized.astype('uint8'))
+    
+
+    def generate_wang_tile(self, img):
+        img = img.convert('RGBA')
+        width, height = img.size
+        img_array = np.array(img)
+        pixels = img_array.reshape((-1,4))
+
+
+        quantized = pixels.reshape(img_array.shape)
+
+        for y in range(height):
+            for x in range(width):
+                if y < width // 2:
+                    quantized[x, y] = img_array[x,y]
+                else:
+                    quantized[x, y] = (0, 0, 0, 0)
 
         return Image.fromarray(quantized.astype('uint8'))

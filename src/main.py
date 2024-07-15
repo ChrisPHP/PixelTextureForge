@@ -24,6 +24,23 @@ proc_tex = procedural_textures.ProceduralTextures()
 def home():
     return render_template('index.html', title='Pixelize')
 
+@app.route('/wang_tiles',  methods=['POST'])
+def want_tiles():
+    if 'image' not in request.files:
+        return 'No file part in the request', 400
+    file = request.files['image']
+    if file.filename == '':
+        return 'No file selected for uploading', 400
+    if file:
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        img = Image.open(file_path)
+
+        new_img = pixel_gen.generate_wang_tile(img)
+        new_img.save(app.config['OUTPUT_FOLDER']+'/noise.png')
+        return send_file(app.config['OUTPUT_FOLDER']+'/noise.png', mimetype='image/png') 
+
 @app.route('/procedural',  methods=['POST'])
 def procedural_texture():
     base_frequency = float(request.form['base_frequency'])
