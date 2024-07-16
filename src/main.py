@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, send_file
 from werkzeug.utils import secure_filename
 from PIL import Image
+from io import BytesIO
 import os
 
 import pixel_generator
@@ -38,8 +39,10 @@ def want_tiles():
         img = Image.open(file_path)
 
         new_img = pixel_gen.generate_wang_tile(img)
-        new_img.save(app.config['OUTPUT_FOLDER']+'/noise.png')
-        return send_file(app.config['OUTPUT_FOLDER']+'/noise.png', mimetype='image/png') 
+        img_io = BytesIO()
+        new_img.save(img_io, 'PNG')
+        img_io.seek(0)
+        return send_file(img_io, mimetype='image/png') 
 
 @app.route('/procedural',  methods=['POST'])
 def procedural_texture():
@@ -50,8 +53,10 @@ def procedural_texture():
     noise_lacunarity = float(request.form['noise_lacunarity'])
 
     new_img = proc_tex.generate_noise(base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
-    new_img.save(app.config['OUTPUT_FOLDER']+'/noise.png')
-    return send_file(app.config['OUTPUT_FOLDER']+'/noise.png', mimetype='image/png') 
+    img_io = BytesIO()
+    new_img.save(img_io, 'PNG')
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/png') 
 
 
 @app.route('/seamless', methods=['POST'])
@@ -77,8 +82,10 @@ def best_tiles():
             new_img = pixel_gen.generate_seamless_texture(img)
             new_img = new_img.resize((img.width, img.height), Image.Resampling.NEAREST)
 
-        new_img.save(app.config['OUTPUT_FOLDER']+'/'+filename)
-        return send_file(app.config['OUTPUT_FOLDER']+'/'+filename, mimetype='image/png') 
+        img_io = BytesIO()
+        new_img.save(img_io, 'PNG')
+        img_io.seek(0)
+        return send_file(img_io, mimetype='image/png')  
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -97,8 +104,11 @@ def upload_file():
         num_colours = int(request.form['num_colours'])
 
         new_img = pixel_gen.process_image(img, num_colours, pixel_size)
-        new_img.save(app.config['OUTPUT_FOLDER']+'/'+filename)
-        return send_file(app.config['OUTPUT_FOLDER']+'/'+filename, mimetype='image/png') 
+
+        img_io = BytesIO()
+        new_img.save(img_io, 'PNG')
+        img_io.seek(0)
+        return send_file(img_io, mimetype='image/png') 
 
 @app.route('/nearest_neighbour', methods=['POST'])
 def nearest_neighbour_resize():
@@ -117,8 +127,10 @@ def nearest_neighbour_resize():
         img_height = int(request.form['height'])
 
         new_img = img.resize((img_width,img_height), Image.Resampling.NEAREST)
-        new_img.save(app.config['OUTPUT_FOLDER']+'/'+filename)
-        return send_file(app.config['OUTPUT_FOLDER']+'/'+filename, mimetype='image/png') 
+        img_io = BytesIO()
+        new_img.save(img_io, 'PNG')
+        img_io.seek(0)
+        return send_file(img_io, mimetype='image/png')  
 
 if __name__ == "__main__":
     app.run(debug=True)

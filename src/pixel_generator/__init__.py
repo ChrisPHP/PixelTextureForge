@@ -48,7 +48,7 @@ class PixelGenerator:
         return result_image
 
     def process_image(self, img, num_colours, pixel_size):
-        img = img.convert('RGBA')
+        img = img.convert('RGB')
         width, height = img.size
 
         new_width = width - (width % pixel_size)
