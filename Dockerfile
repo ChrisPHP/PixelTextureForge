@@ -22,4 +22,4 @@ EXPOSE 5000
 
 # Run the application
 ENTRYPOINT ["pipenv", "run"]
-CMD ["python", "main.py"]
+CMD ["gunicorn", "--config", "gunicorn_config.py", "app:app"]

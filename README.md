@@ -28,9 +28,17 @@ Activate the virtual environment and go into src directory and run the python se
 ```
 pipenv shell
 cd src
-python main.py
 ```
 
+Run in development mode:
+```
+python app.py
+```
+
+Run in production with gunicorn:
+```
+gunicorn --config gunicorn_config.py app:app
+```
 
 ## Using Docker
 
@@ -65,6 +73,8 @@ img2texture
 flask
 werkzeug
 opensimplex
+gunicorn
+gevent
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
