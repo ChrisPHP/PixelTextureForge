@@ -1,7 +1,6 @@
 import numpy as np
 from PIL import Image
 from img2texture import image_to_seamless
-from sklearn.neighbors import NearestNeighbors
 from sklearn.cluster import KMeans
 
 class PixelGenerator:
@@ -57,9 +56,10 @@ class PixelGenerator:
 
         img_array = np.array(img)
 
-        pixels = img_array.reshape((-1,3))
+        pixels = img_array.reshape((-1,4))
 
-        kmeans = KMeans(n_clusters=num_colours, random_state=42)
+        rand_int = np.random.randint(0, 2**32)
+        kmeans = KMeans(n_clusters=num_colours, random_state=rand_int)
         kmeans.fit(pixels)
 
         colours = kmeans.cluster_centers_.astype(int)
@@ -75,5 +75,5 @@ class PixelGenerator:
                 avg_colour = np.mean(block, axis=(0,1)).astype(int)
                 quantized[i:i+pixel_size, j:j+pixel_size] = avg_colour
 
-
         return Image.fromarray(quantized.astype('uint8'))
+    

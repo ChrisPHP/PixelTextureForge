@@ -1,3 +1,2 @@
-*.png
-*.jpeg
-*.jpg
+/src/uploads
+/src/output

@@ -5,18 +5,28 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('seamless-sidebar').style.display = "block";
         document.getElementById('pixel-sidebar').style.display = 'none';
         document.getElementById('procedural-sidebar').style.display = 'none';
+        document.getElementById('wang-sidebar').style.display = 'none';
+    });
+
+    document.getElementById('wang-menu-open').addEventListener('click', function() {
+        document.getElementById('seamless-sidebar').style.display = "none";
+        document.getElementById('pixel-sidebar').style.display = 'none';
+        document.getElementById('procedural-sidebar').style.display = 'none';
+        document.getElementById('wang-sidebar').style.display = 'block';
     });
 
     document.getElementById('pixel-menu-open').addEventListener('click', function() {
         document.getElementById('seamless-sidebar').style.display = "none";
         document.getElementById('pixel-sidebar').style.display = 'block';
         document.getElementById('procedural-sidebar').style.display = 'none';
+        document.getElementById('wang-sidebar').style.display = 'none';
     });
 
     document.getElementById('procedural-menu-open').addEventListener('click', function() {
         document.getElementById('seamless-sidebar').style.display = "none";
         document.getElementById('pixel-sidebar').style.display = 'none';
         document.getElementById('procedural-sidebar').style.display = 'block';
+        document.getElementById('wang-sidebar').style.display = 'none';
     });
 
     let selectedFile = null
@@ -124,6 +134,13 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append('height', rounded_height);
 
         fetch_command('/nearest_neighbour', formData);
+    });
+
+    document.getElementById('wangTiles').addEventListener('click', function(event) {        
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+
+        fetch_command('/wang_tiles', formData);
     });
 
 
