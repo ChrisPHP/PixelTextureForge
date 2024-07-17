@@ -6,6 +6,7 @@ import os
 
 import pixel_generator
 import procedural_textures
+import wang_tile_generator
 
 app = Flask(__name__, template_folder='static')
 
@@ -20,13 +21,14 @@ app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
 pixel_gen = pixel_generator.PixelGenerator()
 proc_tex = procedural_textures.ProceduralTextures()
+wang_tile = wang_tile_generator.WangTilesGenerator()
 
 @app.route('/')
 def home():
     return render_template('index.html', title='Pixelize')
 
 @app.route('/wang_tiles',  methods=['POST'])
-def want_tiles():
+def wang_tiles():
     if 'image' not in request.files:
         return 'No file part in the request', 400
     file = request.files['image']
@@ -38,7 +40,7 @@ def want_tiles():
         file_io.seek(0)
         img = Image.open(file_io)
 
-        new_img = pixel_gen.generate_wang_tile(img)
+        new_img = wang_tile.generate_wang_tile(img)
         img_io = BytesIO()
         new_img.save(img_io, 'PNG')
         img_io.seek(0)
