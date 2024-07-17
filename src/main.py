@@ -33,10 +33,10 @@ def want_tiles():
     if file.filename == '':
         return 'No file selected for uploading', 400
     if file:
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        img = Image.open(file_path)
+        file_io = BytesIO()
+        file.save(file_io)
+        file_io.seek(0)
+        img = Image.open(file_io)
 
         new_img = pixel_gen.generate_wang_tile(img)
         img_io = BytesIO()
@@ -67,10 +67,10 @@ def best_tiles():
     if file.filename == '':
         return 'No file selected for uploading', 400
     if file:
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        img = Image.open(file_path)
+        file_io = BytesIO()
+        file.save(file_io)
+        file_io.seek(0)
+        img = Image.open(file_io)
 
         if 'use_best' not in request.form:
             tile_width = int(request.form['tile_width'])
@@ -95,10 +95,10 @@ def upload_file():
     if file.filename == '':
         return 'No file selected for uploading', 400
     if file:
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        img = Image.open(file_path)
+        file_io = BytesIO()
+        file.save(file_io)
+        file_io.seek(0)
+        img = Image.open(file_io)
 
         pixel_size = int(request.form['pixel_size'])
         num_colours = int(request.form['num_colours'])
@@ -118,10 +118,10 @@ def nearest_neighbour_resize():
     if file.filename == '':
         return 'No file selected for uploading', 400
     if file:
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        img = Image.open(file_path)
+        file_io = BytesIO()
+        file.save(file_io)
+        file_io.seek(0)
+        img = Image.open(file_io)
 
         img_width = int(request.form['width'])
         img_height = int(request.form['height'])
