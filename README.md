@@ -1,6 +1,8 @@
 # Pixelcraft
 This project is a Python-based application for texture generation using machine learning techniques. It utilizes libraries such as Pillow, scikit-learn, and img2texture to create and manipulate textures.
 
+![Screenshot of the pixelcraft program](docs/pixelcraft_example.png)
+
 ## Requirements
 Python 3.11
 Docker (optional, for containerized deployment)
