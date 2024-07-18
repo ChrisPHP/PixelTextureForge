@@ -125,7 +125,7 @@ class WangTilesGenerator:
         return Image.fromarray(grid_image.astype('uint8'))
     
 
-    def generate_wang_borders(self, width, height):
+    def generate_wang_borders(self, width, height, margin):
         center = np.zeros((height, width, 4), dtype=np.uint8)
         left = np.zeros((height, width, 4), dtype=np.uint8)
         bottom = np.zeros((height, width, 4), dtype=np.uint8)
@@ -146,7 +146,6 @@ class WangTilesGenerator:
         corner_top_right = np.zeros((height, width, 4), dtype=np.uint8)   
         corner_top_left = np.zeros((height, width, 4), dtype=np.uint8) 
 
-        margin = 75
         div_height = height // 2
         div_width = width //2
 
@@ -261,3 +260,22 @@ class WangTilesGenerator:
         grid_image = np.concatenate((top_row, mmiddle_row, bottom_row), axis=0)
 
         return Image.fromarray(grid_image.astype('uint8'))
+    
+    @staticmethod
+    def border_style_generation(x,y,width,height,border_type,margin):
+        edge_width = 10
+        def brick_border(x, y, width, height):
+            if y > height or x > width:
+                if y > (width+margin)-edge_width or x > (width+margin) - edge_width:
+                    return (255, 0, 0, 255)
+                else:
+                    return (0, 0, 0, 255)
+            else:
+                return (0, 0, 0, 255)
+    
+        
+        if border_type == "brick":
+            return  brick_border(x, y, width, height)
+        else:
+            return (0, 0, 0, 255)
+
