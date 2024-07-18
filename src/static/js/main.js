@@ -42,13 +42,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const container = document.getElementById(div_id);
             container.innerHTML = ''; // Clear previous image
             container.appendChild(img);
-            img.onload = function() {
-                pixel_size = document.getElementById('pixelSize').value;
-                img_width = this.naturalWidth;
-                img_height = this.naturalHeight;
-                rounded_width = Math.round(img_width/pixel_size);
-                rounded_height = Math.round(img_height/pixel_size);
-                document.getElementById('dimensions-label').innerHTML = `${rounded_width}x${rounded_height}`;
+            if (div_id == 'imageContainer') {
+                img.onload = function() {
+                    pixel_size = document.getElementById('pixelSize').value;
+                    img_width = this.naturalWidth;
+                    img_height = this.naturalHeight;
+                    rounded_width = Math.round(img_width/pixel_size);
+                    rounded_height = Math.round(img_height/pixel_size);
+                    document.getElementById('dimensions-label').innerHTML = `${rounded_width}x${rounded_height}`;
+                }
             }
         }
         reader.readAsDataURL(file);
@@ -143,6 +145,13 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch_command('/wang_tiles', formData);
     });
 
+    document.getElementById('wangBorders').addEventListener('click', function(event) {        
+        const formData = new FormData();
+        formData.append('width', img_width);
+        formData.append('height', img_height);
+
+        fetch_command('/wang_borders', formData);
+    });
 
     function fetch_command(route_name, formData) {
         fetch(route_name, {

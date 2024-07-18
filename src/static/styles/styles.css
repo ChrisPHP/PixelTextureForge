@@ -40,6 +40,10 @@
     display: block;
   }
 
+  #wang-sidebar {
+    display: none;
+  }
+
   #seamless-sidebar {
     display: none;
   }

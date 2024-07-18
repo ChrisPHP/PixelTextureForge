@@ -27,6 +27,18 @@ wang_tile = wang_tile_generator.WangTilesGenerator()
 def home():
     return render_template('index.html', title='Pixelize')
 
+@app.route('/wang_borders',  methods=['POST'])
+def wang_borders():
+    height = int(request.form['height'])
+    width = int(request.form['width'])
+
+    new_img = wang_tile.generate_wang_borders(width, height)
+    img_io = BytesIO()
+    new_img.save(img_io, 'PNG')
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/png') 
+
+
 @app.route('/wang_tiles',  methods=['POST'])
 def wang_tiles():
     if 'image' not in request.files:

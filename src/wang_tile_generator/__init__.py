@@ -146,17 +146,118 @@ class WangTilesGenerator:
         corner_top_right = np.zeros((height, width, 4), dtype=np.uint8)   
         corner_top_left = np.zeros((height, width, 4), dtype=np.uint8) 
 
-        top_row = np.concatenate((top_left, top, top_right, corner_top_left, corner_top_right), axis=1)
-        mmiddle_row = np.concatenate((left, center, right, corner_bottom_left, corner_bottom_right), axis=1)
-        bottom_row = np.concatenate((bottom_left, bottom, bottom_right, bottom_right_top_left, bottom_left_top_right), axis=1)
-        grid_image = np.concatenate((top_row, mmiddle_row, bottom_row), axis=0)
-        
+        margin = 75
+        div_height = height // 2
+        div_width = width //2
+
+
         for y in range(height):
             for x in range(width):
-                if x < width // 1.5 and x > width // 2:
+                if x < div_width+margin and x >= div_width:
                     top[x, y] = (0, 0, 0, 255)
                 else:
                     top[x, y] = (0, 0, 0, 0)
 
+                if x >= div_width and y >=  div_height:
+                    if y <= div_height+margin or x < div_width+margin:
+                        top_left[x, y] = (0, 0, 0, 255)
+                    else:
+                        top_left[x, y] = (0, 0, 0, 0)
+
+                if x >= div_width and y <=  div_height:
+                    if y > div_height-margin or x < div_width+margin:
+                        top_right[x, y] = (0, 0, 0, 255)
+                    else:
+                        top_right[x, y] = (0, 0, 0, 0)
+
+
+                if y <= div_height and y > div_height-margin:
+                    right[x, y] = (0, 0, 0, 255)
+                else:
+                    right[x, y] = (0, 0, 0, 0)
+
+                if y >= div_height and y < div_height+margin:
+                    left[x, y] = (0, 0, 0, 255)
+                else:
+                    left[x, y] = (0, 0, 0, 0)
+
+
+                if x <= div_width  and y >=  div_height:
+                    if y < div_height+margin or x > div_width-margin:
+                        bottom_left[x, y] = (0, 0, 0, 255)
+                    else:
+                        bottom_left[x, y] = (0, 0, 0, 0)
+
+                if x <= div_width  and y <=  div_height:
+                    if y > div_height-margin or x > div_width-margin:
+                        bottom_right[x, y] = (0, 0, 0, 255)
+                    else:
+                        bottom_right[x, y] = (0, 0, 0, 0)
+
+                if x <= div_width and x > div_height-margin:
+                    bottom[x, y] = (0, 0, 0, 255)
+                else:
+                    bottom[x, y] = (0, 0, 0, 0)
+
+
+                if x <= div_width and y <=  div_height:
+                    if y > div_height-margin or x > div_width-margin:
+                        bottom_right_top_left[x, y] = (0, 0, 0, 255)
+                elif x >= div_width and y >=  div_height:
+                    if y < div_height+margin or x < div_width+margin:
+                        bottom_right_top_left[x, y] = (0, 0, 0, 255)
+                else:
+                    bottom_right_top_left[x, y] = (0, 0, 0, 0)
+
+                if x <= div_width and y >=  div_height:
+                    if y < div_height+margin or x > div_width-margin:
+                        bottom_left_top_right[x, y] = (0, 0, 0, 255)
+                elif x >= div_width and y <=  div_height:
+                    if y > div_height-margin or x < div_width+margin:
+                        bottom_left_top_right[x, y] = (0, 0, 0, 255)
+                else:
+                    bottom_left_top_right[x, y] = (0, 0, 0, 0)
+
+
+                if y >= div_height:
+                    if y < div_height+margin and x < div_width+margin:
+                        corner_bottom_right[x, y] = (0, 0, 0, 255)
+                elif x >= div_width and y <=  div_height:
+                    if x < div_width+margin:
+                        corner_bottom_right[x, y] = (0, 0, 0, 255)  
+                else:
+                    corner_bottom_right[x, y] = (0, 0, 0, 0)
+
+                if y >= div_height:
+                    if y < div_height+margin and x > div_width-margin:
+                        corner_top_right[x, y] = (0, 0, 0, 255)
+                elif x <= div_width and y <= div_height:
+                    if x > div_width-margin:
+                        corner_top_right[x, y] = (0, 0, 0, 255)
+                else:
+                    corner_top_right[x, y] = (0, 0, 0, 0)
+
+                if y <= div_height:
+                    if y > div_height-margin and x < div_width+margin:
+                        corner_bottom_left[x, y] = (0, 0, 0, 255)
+                elif x >= div_width and y >=  div_height:
+                    if x < div_width+margin:
+                        corner_bottom_left[x, y] = (0, 0, 0, 255)
+                else:
+                    corner_bottom_left[x, y] = (0, 0, 0, 0)
+
+                if y <= div_height:
+                    if y > div_height-margin and x > div_width-margin:
+                        corner_top_left[x, y] = (0, 0, 0, 255)
+                elif x <= div_width and y >=  div_height:
+                    if x > div_width-margin:
+                        corner_top_left[x, y] = (0, 0, 0, 255)
+                else:
+                    corner_top_left[x, y] = (0, 0, 0, 0)
+
+        top_row = np.concatenate((top_left, top, top_right, corner_top_left, corner_top_right), axis=1)
+        mmiddle_row = np.concatenate((left, center, right, corner_bottom_left, corner_bottom_right), axis=1)
+        bottom_row = np.concatenate((bottom_left, bottom, bottom_right, bottom_right_top_left, bottom_left_top_right), axis=1)
+        grid_image = np.concatenate((top_row, mmiddle_row, bottom_row), axis=0)
 
         return Image.fromarray(grid_image.astype('uint8'))
