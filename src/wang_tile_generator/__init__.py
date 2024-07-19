@@ -270,7 +270,7 @@ class WangTilesGenerator:
     @staticmethod
     def border_style(available_width, div_width, x, y, colour, border_type):
         if border_type == "brick":
-            return brickborder.brick_border(available_width, div_width, x, y)
+            return brickborder.brick_border(available_width, div_width, x, y, colour)
         else:
             return colour
     

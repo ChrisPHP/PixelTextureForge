@@ -1,4 +1,4 @@
-def brick_border(available_width, div_width, x, y):
+def brick_border(available_width, div_width, x, y, colour = (180, 0, 0, 255)):
     brick_width_percent = 50  # Brick width is 15% of the total width
     brick_height_percent = 100   # Brick height is 7% of the total width
     mortar_width_percent = 10
@@ -10,7 +10,7 @@ def brick_border(available_width, div_width, x, y):
 
 
     mortar_color = (200, 200, 200, 255)  # Light gray color for mortar
-    brick_color = (180, 0, 0, 255) 
+    brick_color = colour
 
 
     brick_x = x - div_width
