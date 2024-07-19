@@ -32,8 +32,9 @@ def wang_borders():
     height = int(request.form['height'])
     width = int(request.form['width'])
     border_size = int(request.form['border_size'])
+    border_style = request.form['border_style']
 
-    new_img = wang_tile.generate_wang_borders(width, height, border_size)
+    new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style)
     img_io = BytesIO()
     new_img.save(img_io, 'PNG')
     img_io.seek(0)

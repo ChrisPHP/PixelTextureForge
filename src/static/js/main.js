@@ -162,6 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append('width', img_width);
         formData.append('height', img_height);
         formData.append('border_size', document.getElementById('borderSize').value)
+        formData.append('border_style', document.getElementById('borderStyle').value)
 
         fetch_command('/wang_borders', formData);
     });
