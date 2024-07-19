@@ -4,6 +4,24 @@ from img2texture import image_to_seamless
 from sklearn.cluster import KMeans
 
 class PixelGenerator:
+    def shift_colour(self, img, red_shift, green_shift, blue_shift):
+        img = img.convert('RGBA')
+        width, height = img.size
+        img_array = np.array(img)
+
+        for x in range(width):
+            for y in range(height):
+                r, g, b, a = img_array[y, x]
+                
+                new_r = min(int(r * red_shift), 255)
+                new_g = min(int(g * green_shift), 255)
+                new_b = min(int(b * blue_shift), 255)
+  
+                img_array[y, x] = (new_r, new_g, new_b, a)
+
+
+        return Image.fromarray(img_array.astype('uint8'))
+
     def get_avg_colour(self, img):
         img = img.convert('RGBA')
         np_img = np.array(img)

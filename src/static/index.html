@@ -50,7 +50,21 @@
                     <p>Scale image down resolution (rounded): <span id="dimensions-label"></span></p>
                     <h2>Scale down image</h2>
                     <button id="scaleDown" class="pure-button pure-button-primary">Scale Down</button>
-                </div>
+                    <h2>Shift Colour of image</h2>
+                    <button id="colourShift" class="pure-button pure-button-primary">Shift</button>
+                    <li class="pure-menu-item">
+                        <p>Red:</p>
+                        <input type="number" id="redShift" name="redShift" value="1.0" min="0" max="100">
+                    </li>
+                    <li class="pure-menu-item">
+                        <p>Green:</p>
+                        <input type="number" id="greenShift" name="greenShift" value="1.0" min="0" max="100">
+                    </li>
+                    <li class="pure-menu-item">
+                        <p>Green:</p>
+                        <input type="number" id="blueShift" name="blueShift" value="1.0" min="0" max="100">
+                    </li>                   
+                 </div>
                 <div id="wang-sidebar">
                     <h2>Generate Wang tileset</h2>
                     <button id="wangTiles" class="pure-button pure-button-primary">Run</button>

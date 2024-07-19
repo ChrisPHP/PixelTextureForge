@@ -107,6 +107,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    document.getElementById('colourShift').addEventListener('click', function(event) {
+        if (selectedFile) {
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+            formData.append('red_shift', document.getElementById('redShift').value)
+            formData.append('green_shift', document.getElementById('greenShift').value)
+            formData.append('blue_shift', document.getElementById('blueShift').value)
+
+            fetch_command('/colour_shift', formData);
+        }
+    });
+
     document.getElementById('generateNoise').addEventListener('click', function(event) {
         const formData = new FormData();
         formData.append('base_frequency', document.getElementById('baseFrequency').value);
