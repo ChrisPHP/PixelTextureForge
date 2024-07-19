@@ -68,7 +68,6 @@ class PixelGenerator:
         quantized = colours[labels]
 
         quantized = quantized.reshape(img_array.shape)
-
         for i in range(0, new_height, pixel_size):
             for j in range(0, new_width, pixel_size):
                 block = quantized[i:i+pixel_size, j:j+pixel_size]

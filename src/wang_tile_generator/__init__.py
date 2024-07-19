@@ -1,6 +1,8 @@
 import numpy as np
 from PIL import Image
 
+from . import brickborder
+
 
 class WangTilesGenerator:
     def generate_wang_tile(self, img):
@@ -150,107 +152,110 @@ class WangTilesGenerator:
         div_width = width //2
 
 
+        available_width = div_width + margin - div_width
+
+
         for y in range(height):
             for x in range(width):
-                if x < div_width+margin and x >= div_width:
-                    top[x, y] = (0, 0, 0, 255)
+                if x < div_width + margin and x >= div_width:
+                    top[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 else:
                     top[x, y] = (0, 0, 0, 0)
 
                 if x >= div_width and y >=  div_height:
                     if y <= div_height+margin or x < div_width+margin:
-                        top_left[x, y] = (0, 0, 0, 255)
+                        top_left[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                     else:
                         top_left[x, y] = (0, 0, 0, 0)
 
                 if x >= div_width and y <=  div_height:
                     if y > div_height-margin or x < div_width+margin:
-                        top_right[x, y] = (0, 0, 0, 255)
+                        top_right[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                     else:
                         top_right[x, y] = (0, 0, 0, 0)
 
 
                 if y <= div_height and y > div_height-margin:
-                    right[x, y] = (0, 0, 0, 255)
+                    right[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 else:
                     right[x, y] = (0, 0, 0, 0)
 
                 if y >= div_height and y < div_height+margin:
-                    left[x, y] = (0, 0, 0, 255)
+                    left[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 else:
                     left[x, y] = (0, 0, 0, 0)
 
 
                 if x <= div_width  and y >=  div_height:
                     if y < div_height+margin or x > div_width-margin:
-                        bottom_left[x, y] = (0, 0, 0, 255)
+                        bottom_left[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                     else:
                         bottom_left[x, y] = (0, 0, 0, 0)
 
                 if x <= div_width  and y <=  div_height:
                     if y > div_height-margin or x > div_width-margin:
-                        bottom_right[x, y] = (0, 0, 0, 255)
+                        bottom_right[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                     else:
                         bottom_right[x, y] = (0, 0, 0, 0)
 
                 if x <= div_width and x > div_height-margin:
-                    bottom[x, y] = (0, 0, 0, 255)
+                    bottom[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 else:
                     bottom[x, y] = (0, 0, 0, 0)
 
 
                 if x <= div_width and y <=  div_height:
                     if y > div_height-margin or x > div_width-margin:
-                        bottom_right_top_left[x, y] = (0, 0, 0, 255)
+                        bottom_right_top_left[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 elif x >= div_width and y >=  div_height:
                     if y < div_height+margin or x < div_width+margin:
-                        bottom_right_top_left[x, y] = (0, 0, 0, 255)
+                        bottom_right_top_left[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 else:
                     bottom_right_top_left[x, y] = (0, 0, 0, 0)
 
                 if x <= div_width and y >=  div_height:
                     if y < div_height+margin or x > div_width-margin:
-                        bottom_left_top_right[x, y] = (0, 0, 0, 255)
+                        bottom_left_top_right[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 elif x >= div_width and y <=  div_height:
                     if y > div_height-margin or x < div_width+margin:
-                        bottom_left_top_right[x, y] = (0, 0, 0, 255)
+                        bottom_left_top_right[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 else:
                     bottom_left_top_right[x, y] = (0, 0, 0, 0)
 
 
                 if y >= div_height:
                     if y < div_height+margin and x < div_width+margin:
-                        corner_bottom_right[x, y] = (0, 0, 0, 255)
+                        corner_bottom_right[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 elif x >= div_width and y <=  div_height:
                     if x < div_width+margin:
-                        corner_bottom_right[x, y] = (0, 0, 0, 255)  
+                        corner_bottom_right[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 else:
                     corner_bottom_right[x, y] = (0, 0, 0, 0)
 
                 if y >= div_height:
                     if y < div_height+margin and x > div_width-margin:
-                        corner_top_right[x, y] = (0, 0, 0, 255)
+                        corner_top_right[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 elif x <= div_width and y <= div_height:
                     if x > div_width-margin:
-                        corner_top_right[x, y] = (0, 0, 0, 255)
+                        corner_top_right[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 else:
                     corner_top_right[x, y] = (0, 0, 0, 0)
 
                 if y <= div_height:
                     if y > div_height-margin and x < div_width+margin:
-                        corner_bottom_left[x, y] = (0, 0, 0, 255)
+                        corner_bottom_left[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 elif x >= div_width and y >=  div_height:
                     if x < div_width+margin:
-                        corner_bottom_left[x, y] = (0, 0, 0, 255)
+                        corner_bottom_left[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 else:
                     corner_bottom_left[x, y] = (0, 0, 0, 0)
 
                 if y <= div_height:
                     if y > div_height-margin and x > div_width-margin:
-                        corner_top_left[x, y] = (0, 0, 0, 255)
+                        corner_top_left[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 elif x <= div_width and y >=  div_height:
                     if x > div_width-margin:
-                        corner_top_left[x, y] = (0, 0, 0, 255)
+                        corner_top_left[x, y] = brickborder.brick_border(available_width, div_width, x, y)
                 else:
                     corner_top_left[x, y] = (0, 0, 0, 0)
 
@@ -261,21 +266,4 @@ class WangTilesGenerator:
 
         return Image.fromarray(grid_image.astype('uint8'))
     
-    @staticmethod
-    def border_style_generation(x,y,width,height,border_type,margin):
-        edge_width = 10
-        def brick_border(x, y, width, height):
-            if y > height or x > width:
-                if y > (width+margin)-edge_width or x > (width+margin) - edge_width:
-                    return (255, 0, 0, 255)
-                else:
-                    return (0, 0, 0, 255)
-            else:
-                return (0, 0, 0, 255)
-    
-        
-        if border_type == "brick":
-            return  brick_border(x, y, width, height)
-        else:
-            return (0, 0, 0, 255)
 

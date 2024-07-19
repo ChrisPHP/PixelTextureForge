@@ -25,7 +25,7 @@ wang_tile = wang_tile_generator.WangTilesGenerator()
 
 @app.route('/')
 def home():
-    return render_template('index.html', title='Pixelize')
+    return render_template('index.html', title='Pixelcraft')
 
 @app.route('/wang_borders',  methods=['POST'])
 def wang_borders():
@@ -59,6 +59,32 @@ def wang_tiles():
         img_io.seek(0)
         return send_file(img_io, mimetype='image/png') 
 
+@app.route('/noise_img',  methods=['POST'])
+def noise_image():
+    if 'image' not in request.files:
+        return 'No file part in the request', 400
+    file = request.files['image']
+    if file.filename == '':
+        return 'No file selected for uploading', 400
+    if file:
+        file_io = BytesIO()
+        file.save(file_io)
+        file_io.seek(0)
+        img = Image.open(file_io)
+
+        base_frequency = float(request.form['base_frequency'])
+        cell_size = int(request.form['cell_size'])
+        noise_octaves = int(request.form['noise_octaves'])
+        noise_persistance = float(request.form['noise_persistance'])
+        noise_lacunarity = float(request.form['noise_lacunarity'])
+
+        new_img = proc_tex.noiseify_image(img, base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
+        img_io = BytesIO()
+        new_img.save(img_io, 'PNG')
+        img_io.seek(0)
+        return send_file(img_io, mimetype='image/png') 
+
+
 @app.route('/procedural',  methods=['POST'])
 def procedural_texture():
     base_frequency = float(request.form['base_frequency'])
@@ -67,7 +93,7 @@ def procedural_texture():
     noise_persistance = float(request.form['noise_persistance'])
     noise_lacunarity = float(request.form['noise_lacunarity'])
 
-    new_img = proc_tex.generate_noise(base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
+    new_img = proc_tex.noise_texture([300, 300], base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
     img_io = BytesIO()
     new_img.save(img_io, 'PNG')
     img_io.seek(0)
