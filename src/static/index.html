@@ -54,6 +54,16 @@
                 <div id="wang-sidebar">
                     <h2>Generate Wang tileset</h2>
                     <button id="wangTiles" class="pure-button pure-button-primary">Run</button>
+                    <h2>Generate Borders</h2>
+                    <button id="wangBorders" class="pure-button pure-button-primary">Run</button>
+                    <li class="pure-menu-item">
+                        <p>Border Size:</p>
+                        <select id="borderStyle" name="borderStyle">
+                            <option value="flat">flat</option>
+                            <option value="brick">Brick</option>
+                        </select>
+                        <input type="number" id="borderSize" name="borderSize" value="75" min="1" >
+                    </li>
                 </div>
                 <div id="procedural-sidebar">
                     <h2>Generate Texture</h2>
@@ -78,6 +88,7 @@
                         <p>Lacunarity:</p>
                         <input type="number" id="noiseLacunarity" name="noiseLacunarity" value="2.0" max="100">
                     </li>
+                    <button id="noiseImage" class="pure-button pure-button-primary">noise image</button>
                 </div>
                 <div id="seamless-sidebar">
                     <h2>Find best part of image to tile:</h2>
