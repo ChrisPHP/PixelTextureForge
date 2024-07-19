@@ -159,6 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('wangBorders').addEventListener('click', function(event) {        
         const formData = new FormData();
+        formData.append('image', selectedFile);
         formData.append('width', img_width);
         formData.append('height', img_height);
         formData.append('border_size', document.getElementById('borderSize').value)

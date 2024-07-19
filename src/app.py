@@ -29,16 +29,28 @@ def home():
 
 @app.route('/wang_borders',  methods=['POST'])
 def wang_borders():
-    height = int(request.form['height'])
-    width = int(request.form['width'])
-    border_size = int(request.form['border_size'])
-    border_style = request.form['border_style']
+    if 'image' not in request.files:
+        return 'No file part in the request', 400
+    file = request.files['image']
+    if file.filename == '':
+        return 'No file selected for uploading', 400
+    if file:
+        file_io = BytesIO()
+        file.save(file_io)
+        file_io.seek(0)
+        img = Image.open(file_io)
+        avg_colour = pixel_gen.get_avg_colour(img)
 
-    new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style)
-    img_io = BytesIO()
-    new_img.save(img_io, 'PNG')
-    img_io.seek(0)
-    return send_file(img_io, mimetype='image/png') 
+        height = int(request.form['height'])
+        width = int(request.form['width'])
+        border_size = int(request.form['border_size'])
+        border_style = request.form['border_style']
+
+        new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
+        img_io = BytesIO()
+        new_img.save(img_io, 'PNG')
+        img_io.seek(0)
+        return send_file(img_io, mimetype='image/png') 
 
 
 @app.route('/wang_tiles',  methods=['POST'])

@@ -4,6 +4,13 @@ from img2texture import image_to_seamless
 from sklearn.cluster import KMeans
 
 class PixelGenerator:
+    def get_avg_colour(self, img):
+        img = img.convert('RGBA')
+        np_img = np.array(img)
+        average_colour = np_img.mean(axis=(0,1))
+        average_colour = tuple(int(round(x)) for x in average_colour)
+        return average_colour
+
     def score_seamlessness(self, region):
         left_edge = region[:, 0]
         right_edge = region[:, -1]
