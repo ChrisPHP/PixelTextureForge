@@ -130,18 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch_command('/procedural', formData);
     });
 
-    document.getElementById('noiseImage').addEventListener('click', function(event) {
-        const formData = new FormData();
-        formData.append('image', selectedFile);
-        formData.append('base_frequency', document.getElementById('baseFrequency').value);
-        formData.append('cell_size', document.getElementById('cellSize').value);
-        formData.append('noise_octaves', document.getElementById('noiseOctaves').value);
-        formData.append('noise_persistance', document.getElementById('noisePersistance').value);
-        formData.append('noise_lacunarity', document.getElementById('noiseLacunarity').value);
-
-        fetch_command('/noise_img', formData);
-    });
-
     document.getElementById('pixelSize').addEventListener('change', function(event) {
         pixel_size = document.getElementById('pixelSize').value;
         rounded_width = Math.round(img_width/pixel_size);
