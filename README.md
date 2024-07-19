@@ -64,8 +64,20 @@ docker compose up
 ```
 
 ## Usage
-Just simply go to this URL in your browser `http://127.0.0.1:5000`
+Just go to this URL in your browser `http://127.0.0.1:5000`
 
+
+## Roadmap
+
+- [x] Pixelize Images
+- [x] Create Wang tiles
+- [x] Add Wang tile Borders
+- [x] Convert images to seamless
+- [ ] Add Procedural Texture Generation
+- [ ] Edit colour palette
+- [ ] Optmisation
+    - [ ] Multithreading
+    - [ ] Dockerfile arguments
 
 ## Dependencies
 
