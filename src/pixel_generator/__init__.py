@@ -29,7 +29,7 @@ class PixelGenerator:
         average_colour = tuple(int(round(x)) for x in average_colour)
         return average_colour
 
-    def apply_colour_palette(self, img, colours):
+    def apply_colour_palette(self, img, colours, blend_factor=0.5):
         img = img.convert('RGB')
         img_array = np.array(img)
 
@@ -42,7 +42,11 @@ class PixelGenerator:
 
         quantized_pixels = palette_array[closest_palette_indices]
 
-        quantized_img_array = quantized_pixels.reshape(img_array.shape)
+        blended_pixels = pixels * (1 - blend_factor) + quantized_pixels * blend_factor
+
+        blended_pixels = np.clip(blended_pixels, 0, 255).astype('uint8')
+
+        quantized_img_array = blended_pixels.reshape(img_array.shape)
 
         return Image.fromarray(quantized_img_array.astype('uint8'))
 

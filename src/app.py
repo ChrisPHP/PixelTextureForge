@@ -114,8 +114,9 @@ def colour_palette():
 
     colour = request.form['colours']
     colours_json = json.loads(colour)
+    palette_factor = float(request.form['factor'])
 
-    new_img = pixel_gen.apply_colour_palette(img, colours_json)
+    new_img = pixel_gen.apply_colour_palette(img, colours_json, palette_factor)
 
     img_io = BytesIO()
     new_img.save(img_io, 'PNG')

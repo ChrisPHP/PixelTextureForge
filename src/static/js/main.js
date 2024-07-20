@@ -200,6 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const formData = new FormData();
             formData.append('image', selectedFile);
             formData.append('colours', paletteJSON);
+            formData.append('factor', document.getElementById('paletteFactor').value);
 
             fetch_command('/colour_palette', formData);
         })
