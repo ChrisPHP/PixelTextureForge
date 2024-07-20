@@ -63,7 +63,25 @@
                     <li class="pure-menu-item">
                         <p>Green:</p>
                         <input type="number" id="blueShift" name="blueShift" value="1.0" min="0" max="100">
-                    </li>                   
+                    </li>    
+                    <h2>Apply Colour Palette</h2>
+                    <button id="colourPalette" class="pure-button pure-button-primary">get</button>
+                    <li class="pure-menu-item">
+                        <p>Palette Mode:</p>
+                        <select id="paletteMode" name="paletteMode">
+                            <option value="monochrome">Monochrome</option>
+                            <option value="monochrome-light">Monochrome Dark</option>
+                            <option value="analogic">Analogic</option>
+                            <option value="complement">Complement</option>
+                            <option value="analogic-complement">Analogic Complement</option>
+                            <option value="triad">Triad</option>
+                            <option value="quad">Quad</option>
+                        </select>
+                    </li>
+                    <li class="pure-menu-item">
+                        <p>Colour:</p>
+                        <input class="colour-input" type="color" id="chosenColour" name="chosenColour" value="#ff0000">
+                    </li>               
                  </div>
                 <div id="wang-sidebar">
                     <h2>Generate Wang tileset</h2>
@@ -71,11 +89,14 @@
                     <h2>Generate Borders</h2>
                     <button id="wangBorders" class="pure-button pure-button-primary">Run</button>
                     <li class="pure-menu-item">
-                        <p>Border Size:</p>
+                        <p>Border Style:</p>
                         <select id="borderStyle" name="borderStyle">
                             <option value="flat">flat</option>
                             <option value="brick">Brick</option>
                         </select>
+                    </li>
+                    <li class="pure-menu-item">
+                        <p>Border Size:</p>
                         <input type="number" id="borderSize" name="borderSize" value="75" min="1" >
                     </li>
                 </div>

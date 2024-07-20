@@ -29,6 +29,23 @@ class PixelGenerator:
         average_colour = tuple(int(round(x)) for x in average_colour)
         return average_colour
 
+    def apply_colour_palette(self, img, colours):
+        img = img.convert('RGB')
+        img_array = np.array(img)
+
+        pixels = img_array.reshape((-1,3))
+        palette_array = np.array(colours)
+        
+        distances = np.sqrt(((pixels[:, np.newaxis, :] - palette_array) ** 2).sum(axis=2))
+
+        closest_palette_indices = distances.argmin(axis=1)
+
+        quantized_pixels = palette_array[closest_palette_indices]
+
+        quantized_img_array = quantized_pixels.reshape(img_array.shape)
+
+        return Image.fromarray(quantized_img_array.astype('uint8'))
+
     def score_seamlessness(self, region):
         left_edge = region[:, 0]
         right_edge = region[:, -1]

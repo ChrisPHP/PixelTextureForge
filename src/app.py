@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from io import BytesIO
 import os
+import json
 
 import pixel_generator
 import procedural_textures
@@ -105,6 +106,21 @@ def best_tiles():
     new_img.save(img_io, 'PNG')
     img_io.seek(0)
     return send_file(img_io, mimetype='image/png')  
+
+
+@app.route('/colour_palette', methods=['POST'])
+def colour_palette():
+    img = verify_file(request)
+
+    colour = request.form['colours']
+    colours_json = json.loads(colour)
+
+    new_img = pixel_gen.apply_colour_palette(img, colours_json)
+
+    img_io = BytesIO()
+    new_img.save(img_io, 'PNG')
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/png') 
 
 @app.route('/colour_shift', methods=['POST'])
 def colour_shift():

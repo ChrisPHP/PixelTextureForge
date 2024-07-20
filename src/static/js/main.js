@@ -162,10 +162,50 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append('image', selectedFile);
         formData.append('width', img_width);
         formData.append('height', img_height);
-        formData.append('border_size', document.getElementById('borderSize').value)
-        formData.append('border_style', document.getElementById('borderStyle').value)
+        formData.append('border_size', document.getElementById('borderSize').value);
+        formData.append('border_style', document.getElementById('borderStyle').value);
 
         fetch_command('/wang_borders', formData);
+    });
+
+    document.getElementById('colourPalette').addEventListener('click', function(event) {        
+        palette_mode = document.getElementById('paletteMode').value;
+        val = document.getElementById('chosenColour').value;
+        val = val.toUpperCase();
+        chosen_colour = val.slice(1);
+
+        const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=6';
+
+        palette = []
+
+        fetch(url)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            col = data.colors;
+            for (var i = 0; i < col.length; i++) {
+                palette.push([
+                    col[i].rgb.r,
+                    col[i].rgb.g,
+                    col[i].rgb.b
+                ]);
+            }
+
+            const paletteJSON = JSON.stringify(palette);
+
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+            formData.append('colours', paletteJSON);
+
+            fetch_command('/colour_palette', formData);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
     });
 
     function fetch_command(route_name, formData) {
