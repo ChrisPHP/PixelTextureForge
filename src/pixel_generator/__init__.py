@@ -4,12 +4,51 @@ from img2texture import image_to_seamless
 from sklearn.cluster import KMeans
 
 class PixelGenerator:
+    def shift_colour(self, img, red_shift, green_shift, blue_shift):
+        img = img.convert('RGBA')
+        width, height = img.size
+        img_array = np.array(img)
+
+        for x in range(width):
+            for y in range(height):
+                r, g, b, a = img_array[y, x]
+                
+                new_r = min(int(r * red_shift), 255)
+                new_g = min(int(g * green_shift), 255)
+                new_b = min(int(b * blue_shift), 255)
+  
+                img_array[y, x] = (new_r, new_g, new_b, a)
+
+
+        return Image.fromarray(img_array.astype('uint8'))
+
     def get_avg_colour(self, img):
         img = img.convert('RGBA')
         np_img = np.array(img)
         average_colour = np_img.mean(axis=(0,1))
         average_colour = tuple(int(round(x)) for x in average_colour)
         return average_colour
+
+    def apply_colour_palette(self, img, colours, blend_factor=0.5):
+        img = img.convert('RGB')
+        img_array = np.array(img)
+
+        pixels = img_array.reshape((-1,3))
+        palette_array = np.array(colours)
+        
+        distances = np.sqrt(((pixels[:, np.newaxis, :] - palette_array) ** 2).sum(axis=2))
+
+        closest_palette_indices = distances.argmin(axis=1)
+
+        quantized_pixels = palette_array[closest_palette_indices]
+
+        blended_pixels = pixels * (1 - blend_factor) + quantized_pixels * blend_factor
+
+        blended_pixels = np.clip(blended_pixels, 0, 255).astype('uint8')
+
+        quantized_img_array = blended_pixels.reshape(img_array.shape)
+
+        return Image.fromarray(quantized_img_array.astype('uint8'))
 
     def score_seamlessness(self, region):
         left_edge = region[:, 0]

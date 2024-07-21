@@ -1,32 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Header Buttons
 
-    document.getElementById('seamless-menu-open').addEventListener('click', function() {
-        document.getElementById('seamless-sidebar').style.display = "block";
-        document.getElementById('pixel-sidebar').style.display = 'none';
-        document.getElementById('procedural-sidebar').style.display = 'none';
-        document.getElementById('wang-sidebar').style.display = 'none';
-    });
+    const sidebarIds = ['seamless', 'wang', 'pixel', 'procedural', 'colours'];
 
-    document.getElementById('wang-menu-open').addEventListener('click', function() {
-        document.getElementById('seamless-sidebar').style.display = "none";
-        document.getElementById('pixel-sidebar').style.display = 'none';
-        document.getElementById('procedural-sidebar').style.display = 'none';
-        document.getElementById('wang-sidebar').style.display = 'block';
-    });
+    function toggleSidebar(activeId) {
+        sidebarIds.forEach(id => {
+            const sidebar = document.getElementById(`${id}-sidebar`);
+            sidebar.style.display = id === activeId ? 'block' : 'none';
+        });
+    }
 
-    document.getElementById('pixel-menu-open').addEventListener('click', function() {
-        document.getElementById('seamless-sidebar').style.display = "none";
-        document.getElementById('pixel-sidebar').style.display = 'block';
-        document.getElementById('procedural-sidebar').style.display = 'none';
-        document.getElementById('wang-sidebar').style.display = 'none';
-    });
-
-    document.getElementById('procedural-menu-open').addEventListener('click', function() {
-        document.getElementById('seamless-sidebar').style.display = "none";
-        document.getElementById('pixel-sidebar').style.display = 'none';
-        document.getElementById('procedural-sidebar').style.display = 'block';
-        document.getElementById('wang-sidebar').style.display = 'none';
+    sidebarIds.forEach(id => {
+        const menuOpen = document.getElementById(`${id}-menu-open`);
+        menuOpen.addEventListener('click', () => toggleSidebar(id));
     });
 
     let selectedFile = null
@@ -107,6 +93,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    document.getElementById('colourShift').addEventListener('click', function(event) {
+        if (selectedFile) {
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+            formData.append('red_shift', document.getElementById('redShift').value)
+            formData.append('green_shift', document.getElementById('greenShift').value)
+            formData.append('blue_shift', document.getElementById('blueShift').value)
+
+            fetch_command('/colour_shift', formData);
+        }
+    });
+
     document.getElementById('generateNoise').addEventListener('click', function(event) {
         const formData = new FormData();
         formData.append('base_frequency', document.getElementById('baseFrequency').value);
@@ -116,18 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append('noise_lacunarity', document.getElementById('noiseLacunarity').value);
 
         fetch_command('/procedural', formData);
-    });
-
-    document.getElementById('noiseImage').addEventListener('click', function(event) {
-        const formData = new FormData();
-        formData.append('image', selectedFile);
-        formData.append('base_frequency', document.getElementById('baseFrequency').value);
-        formData.append('cell_size', document.getElementById('cellSize').value);
-        formData.append('noise_octaves', document.getElementById('noiseOctaves').value);
-        formData.append('noise_persistance', document.getElementById('noisePersistance').value);
-        formData.append('noise_lacunarity', document.getElementById('noiseLacunarity').value);
-
-        fetch_command('/noise_img', formData);
     });
 
     document.getElementById('pixelSize').addEventListener('change', function(event) {
@@ -162,10 +148,51 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append('image', selectedFile);
         formData.append('width', img_width);
         formData.append('height', img_height);
-        formData.append('border_size', document.getElementById('borderSize').value)
-        formData.append('border_style', document.getElementById('borderStyle').value)
+        formData.append('border_size', document.getElementById('borderSize').value);
+        formData.append('border_style', document.getElementById('borderStyle').value);
 
         fetch_command('/wang_borders', formData);
+    });
+
+    document.getElementById('colourPalette').addEventListener('click', function(event) {        
+        palette_mode = document.getElementById('paletteMode').value;
+        val = document.getElementById('chosenColour').value;
+        val = val.toUpperCase();
+        chosen_colour = val.slice(1);
+
+        const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=6';
+
+        palette = []
+
+        fetch(url)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            col = data.colors;
+            for (var i = 0; i < col.length; i++) {
+                palette.push([
+                    col[i].rgb.r,
+                    col[i].rgb.g,
+                    col[i].rgb.b
+                ]);
+            }
+
+            const paletteJSON = JSON.stringify(palette);
+
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+            formData.append('colours', paletteJSON);
+            formData.append('factor', document.getElementById('paletteFactor').value);
+
+            fetch_command('/colour_palette', formData);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
     });
 
     function fetch_command(route_name, formData) {

@@ -74,7 +74,7 @@ Just go to this URL in your browser `http://127.0.0.1:5000`
 - [x] Add Wang tile Borders
 - [x] Convert images to seamless
 - [ ] Add Procedural Texture Generation
-- [ ] Edit colour palette
+- [x] Edit colour palette
 - [ ] Optmisation
     - [ ] Multithreading
     - [ ] Dockerfile arguments
