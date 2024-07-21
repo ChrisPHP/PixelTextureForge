@@ -21,6 +21,9 @@
                     <a href="#" id="pixel-menu-open" class="pure-menu-link">Pixelize Image</a>
                 </li>
                 <li class="pure-menu-item">
+                    <a href="#" id="colours-menu-open" class="pure-menu-link">Change Colours</a>
+                </li>
+                <li class="pure-menu-item">
                     <a href="#" id="wang-menu-open" class="pure-menu-link">Wang Tile</a>
                 </li>
                 <li class="pure-menu-item">
@@ -49,7 +52,9 @@
                     </li>
                     <p>Scale image down resolution (rounded): <span id="dimensions-label"></span></p>
                     <h2>Scale down image</h2>
-                    <button id="scaleDown" class="pure-button pure-button-primary">Scale Down</button>
+                    <button id="scaleDown" class="pure-button pure-button-primary">Scale Down</button>            
+                </div>
+                <div id="colours-sidebar">
                     <h2>Shift Colour of image</h2>
                     <button id="colourShift" class="pure-button pure-button-primary">Shift</button>
                     <li class="pure-menu-item">
@@ -65,7 +70,7 @@
                         <input type="number" id="blueShift" name="blueShift" step="0.1" value="1.0" min="0" max="100">
                     </li>    
                     <h2>Apply Colour Palette</h2>
-                    <button id="colourPalette" class="pure-button pure-button-primary">get</button>
+                    <button id="colourPalette" class="pure-button pure-button-primary">Apply</button>
                     <li class="pure-menu-item">
                         <p>Palette Mode:</p>
                         <select id="paletteMode" name="paletteMode">
@@ -85,8 +90,8 @@
                     <li class="pure-menu-item">
                         <p>Factor:</p>
                         <input type="number" id="paletteFactor" name="paletteFactor" step="0.1" value="1.0" min="0.0", max="1.0">
-                    </li>             
-                 </div>
+                    </li> 
+                </div>
                 <div id="wang-sidebar">
                     <h2>Generate Wang tileset</h2>
                     <button id="wangTiles" class="pure-button pure-button-primary">Run</button>

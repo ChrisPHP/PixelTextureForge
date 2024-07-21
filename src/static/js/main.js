@@ -1,32 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Header Buttons
 
-    document.getElementById('seamless-menu-open').addEventListener('click', function() {
-        document.getElementById('seamless-sidebar').style.display = "block";
-        document.getElementById('pixel-sidebar').style.display = 'none';
-        document.getElementById('procedural-sidebar').style.display = 'none';
-        document.getElementById('wang-sidebar').style.display = 'none';
-    });
+    const sidebarIds = ['seamless', 'wang', 'pixel', 'procedural', 'colours'];
 
-    document.getElementById('wang-menu-open').addEventListener('click', function() {
-        document.getElementById('seamless-sidebar').style.display = "none";
-        document.getElementById('pixel-sidebar').style.display = 'none';
-        document.getElementById('procedural-sidebar').style.display = 'none';
-        document.getElementById('wang-sidebar').style.display = 'block';
-    });
+    function toggleSidebar(activeId) {
+        sidebarIds.forEach(id => {
+            const sidebar = document.getElementById(`${id}-sidebar`);
+            sidebar.style.display = id === activeId ? 'block' : 'none';
+        });
+    }
 
-    document.getElementById('pixel-menu-open').addEventListener('click', function() {
-        document.getElementById('seamless-sidebar').style.display = "none";
-        document.getElementById('pixel-sidebar').style.display = 'block';
-        document.getElementById('procedural-sidebar').style.display = 'none';
-        document.getElementById('wang-sidebar').style.display = 'none';
-    });
-
-    document.getElementById('procedural-menu-open').addEventListener('click', function() {
-        document.getElementById('seamless-sidebar').style.display = "none";
-        document.getElementById('pixel-sidebar').style.display = 'none';
-        document.getElementById('procedural-sidebar').style.display = 'block';
-        document.getElementById('wang-sidebar').style.display = 'none';
+    sidebarIds.forEach(id => {
+        const menuOpen = document.getElementById(`${id}-menu-open`);
+        menuOpen.addEventListener('click', () => toggleSidebar(id));
     });
 
     let selectedFile = null
