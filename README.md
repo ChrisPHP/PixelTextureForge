@@ -12,7 +12,7 @@ Using pipenv
 
 Clone this repository:
 ```
-git clone https://github.com/ChrisPHP/pixelcraft.git)
+git clone https://github.com/ChrisPHP/pixelcraft.git
 cd pixelcraft
 ```
 
