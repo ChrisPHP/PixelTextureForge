@@ -26,7 +26,7 @@ wang_tile = wang_tile_generator.WangTilesGenerator()
 
 @app.route('/')
 def home():
-    return render_template('index.html', title='Pixelcraft')
+    return render_template('index.html', title='PixelTextureForge')
 
 @app.route('/wang_borders',  methods=['POST'])
 def wang_borders():

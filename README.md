@@ -1,7 +1,7 @@
-# Pixelcraft
+# PixelTextureForge
 This project is a Python-based application for texture generation using machine learning techniques. It utilizes libraries such as Pillow, scikit-learn, and img2texture to create and manipulate textures.
 
-![Screenshot of the pixelcraft program](docs/pixelcraft_example.png)
+![Screenshot of the PixelTextureForge program](docs/PixelTextureForge_example.png)
 
 ## Requirements
 Python 3.11
@@ -12,8 +12,8 @@ Using pipenv
 
 Clone this repository:
 ```
-git clone https://github.com/ChrisPHP/pixelcraft.git
-cd pixelcraft
+git clone https://github.com/ChrisPHP/PixelTextureForge.git
+cd PixelTextureForge
 ```
 
 Install pipenv if you haven't already:
@@ -46,11 +46,11 @@ gunicorn --config gunicorn_config.py app:app
 
 Clone this repository:
 ```
-git clone https://github.com/ChrisPHP/pixelcraft.git
+git clone https://github.com/ChrisPHP/PixelTextureForge.git
 ```
-Go into the pixelcraft directory
+Go into the PixelTextureForge directory
 ```
-cd pixelcraft
+cd PixelTextureForge
 ```
 
 Build the Docker image with docker compose:
