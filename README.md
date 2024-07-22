@@ -8,7 +8,7 @@ Python 3.11
 Docker (optional, for containerized deployment)
 
 ## Installation
-Using pipenv (recommended)
+Using pipenv
 
 Clone this repository:
 ```
@@ -42,11 +42,11 @@ Run in production with gunicorn:
 gunicorn --config gunicorn_config.py app:app
 ```
 
-## Using Docker
+## Using Docker (recommended)
 
 Clone this repository:
 ```
-git clone https://github.com/ChrisPHP/pixelcraft.git)
+git clone https://github.com/ChrisPHP/pixelcraft.git
 ```
 Go into the pixelcraft directory
 ```
