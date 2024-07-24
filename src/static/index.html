@@ -132,6 +132,22 @@
                         <p>Lacunarity:</p>
                         <input type="number" id="noiseLacunarity" name="noiseLacunarity" step="0.1" value="2.0" max="100">
                     </li>
+                    <li class="pure-menu-item">
+                        <p>Palette Mode:</p>
+                        <select id="paletteNoise" name="paletteNoise">
+                            <option value="monochrome">Monochrome</option>
+                            <option value="monochrome-light">Monochrome Dark</option>
+                            <option value="analogic">Analogic</option>
+                            <option value="complement">Complement</option>
+                            <option value="analogic-complement">Analogic Complement</option>
+                            <option value="triad">Triad</option>
+                            <option value="quad">Quad</option>
+                        </select>
+                    </li>
+                    <li class="pure-menu-item">
+                        <p>Colour:</p>
+                        <input class="colour-input" type="color" id="noiseChosenColour" name="noiseChosenColour" value="#ff0000">
+                    </li>
                 </div>
                 <div id="seamless-sidebar">
                     <h2>Find best part of image to tile:</h2>

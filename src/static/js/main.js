@@ -105,13 +105,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    document.getElementById('generateNoise').addEventListener('click', function(event) {
+    document.getElementById('generateNoise').addEventListener('click', async function(event) {
         const formData = new FormData();
         formData.append('base_frequency', document.getElementById('baseFrequency').value);
         formData.append('cell_size', document.getElementById('cellSize').value);
         formData.append('noise_octaves', document.getElementById('noiseOctaves').value);
         formData.append('noise_persistance', document.getElementById('noisePersistance').value);
         formData.append('noise_lacunarity', document.getElementById('noiseLacunarity').value);
+
+        palette_mode = document.getElementById('paletteNoise').value;
+        val = document.getElementById('noiseChosenColour').value;
+        val = val.toUpperCase();
+        chosen_colour = val.slice(1);
+
+        const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=6';
+        const palette = await colour_palette_fetch(url);
+        formData.append('colours', palette);
 
         fetch_command('/procedural', formData);
     });
@@ -154,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch_command('/wang_borders', formData);
     });
 
-    document.getElementById('colourPalette').addEventListener('click', function(event) {        
+    document.getElementById('colourPalette').addEventListener('click', async function(event) {        
         palette_mode = document.getElementById('paletteMode').value;
         val = document.getElementById('chosenColour').value;
         val = val.toUpperCase();
@@ -162,38 +171,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=6';
 
-        palette = []
+        const palette = await colour_palette_fetch(url);
 
-        fetch(url)
-        .then(response => {
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+        formData.append('colours', palette);
+        formData.append('factor', document.getElementById('paletteFactor').value);
+
+        fetch_command('/colour_palette', formData);
+    });
+
+    async function colour_palette_fetch(url) {
+        palette = []
+        try {
+            const response = await fetch(url);
             if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json();
-        })
-        .then(data => {
-            col = data.colors;
-            for (var i = 0; i < col.length; i++) {
+
+            const data = await response.json();
+            const col = data.colors;
+
+            for (let i = 0; i < col.length; i++) {
                 palette.push([
-                    col[i].rgb.r,
-                    col[i].rgb.g,
-                    col[i].rgb.b
+                  col[i].rgb.r,
+                  col[i].rgb.g,
+                  col[i].rgb.b
                 ]);
             }
 
-            const paletteJSON = JSON.stringify(palette);
-
-            const formData = new FormData();
-            formData.append('image', selectedFile);
-            formData.append('colours', paletteJSON);
-            formData.append('factor', document.getElementById('paletteFactor').value);
-
-            fetch_command('/colour_palette', formData);
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
-    });
+            return JSON.stringify(palette);
+        } catch (error) {
+            throw error;
+        }
+    }
 
     function fetch_command(route_name, formData) {
         fetch(route_name, {

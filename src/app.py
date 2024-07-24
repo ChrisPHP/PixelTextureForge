@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, send_file
-from werkzeug.utils import secure_filename
 from PIL import Image
 from io import BytesIO
 import os
@@ -80,8 +79,10 @@ def procedural_texture():
     noise_octaves = int(request.form['noise_octaves'])
     noise_persistance = float(request.form['noise_persistance'])
     noise_lacunarity = float(request.form['noise_lacunarity'])
+    colour = request.form['colours']
+    colours_json = json.loads(colour)
 
-    new_img = proc_tex.noise_texture([300, 300], base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
+    new_img = proc_tex.noise_texture([300, 300], colours_json, base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
     img_io = BytesIO()
     new_img.save(img_io, 'PNG')
     img_io.seek(0)
