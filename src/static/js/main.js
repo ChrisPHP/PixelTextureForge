@@ -2,6 +2,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // Header Buttons
 
     const sidebarIds = ['seamless', 'wang', 'pixel', 'procedural', 'colours'];
+    const detailsId = ['brick'];
+
+    function toggleDetails(activeId) {
+        detailsId.forEach(id => {
+            const details = document.getElementById(`${id}-details`);
+            details.style.display = id === activeId ? 'block' : 'none';
+        });
+    }
+
+    document.getElementById('textureOption').addEventListener('change', function(event) {
+       toggleDetails(event.target.value);
+    });
 
     function toggleSidebar(activeId) {
         sidebarIds.forEach(id => {
@@ -75,8 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (selectedFile) {
             const formData = new FormData();
             formData.append('image', selectedFile);
-            formData.append('tile_width', document.getElementById('tileWidth').value)
-            formData.append('tile_height', document.getElementById('tileHeight').value)
+            formData.append('tile_width', document.getElementById('tileWidth').value);
+            formData.append('tile_height', document.getElementById('tileHeight').value);
 
             fetch_command('/seamless', formData);
         }
@@ -107,6 +119,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('generateNoise').addEventListener('click', async function(event) {
         const formData = new FormData();
+        const texture_type =  document.getElementById('textureOption').value;
+
+        formData.append('texture_type', texture_type);
+        if (texture_type == 'brick')  {
+            formData.append('brick_width', document.getElementById('brickWidth').value);
+            formData.append('brick_height', document.getElementById('brickHeight').value);
+            formData.append('mortar_size', document.getElementById('mortarSize').value);
+        }
+        
+        formData.append('tile_width', document.getElementById('noiseWidth').value);
+        formData.append('tile_height', document.getElementById('noiseHeight').value);
         formData.append('base_frequency', document.getElementById('baseFrequency').value);
         formData.append('cell_size', document.getElementById('cellSize').value);
         formData.append('noise_octaves', document.getElementById('noiseOctaves').value);

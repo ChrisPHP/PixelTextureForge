@@ -2,6 +2,9 @@ import opensimplex
 from PIL import Image
 import numpy as np
 
+from . import brick
+
+
 class ProceduralTextures:
     def improved_noise(self, baseFrequency, cellSize, octaves, persistance, lacunarity, coords):
         totalNoise = 0
@@ -53,9 +56,6 @@ class ProceduralTextures:
         height = img_size[1]
 
         new_colours = np.array(colours) / 255.0
-
-        brown = np.array([165, 42, 42]) / 255.0  # RGB for brown
-        green = np.array([0, 255, 0]) / 255.0    # RGB for green
 
         thresholds = np.array([0.15, 0.3, 0.45, 0.6, 0.75, 1.0])
 
@@ -118,3 +118,8 @@ class ProceduralTextures:
 
 
         return Image.fromarray(img_array.astype('uint8'))
+
+
+    def generate_brick_texture(self, img_size, base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity, brick_width, brick_height, mortar_size):
+        noise_array = self.generate_noise(img_size, base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
+        return brick.create_brick_texture(img_size[0], img_size[1], noise_array, brick_width, brick_height, mortar_size)

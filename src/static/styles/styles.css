@@ -40,6 +40,8 @@
   width: 100%;
 }
 
+
+/* Sidebar content */
 #pixel-sidebar {
   display: block;
 }
@@ -57,5 +59,10 @@
 }
 
 #colours-sidebar {
+  display: none;
+}
+
+/* procedural content */
+#brick-details {
   display: none;
 }

@@ -79,10 +79,31 @@ def procedural_texture():
     noise_octaves = int(request.form['noise_octaves'])
     noise_persistance = float(request.form['noise_persistance'])
     noise_lacunarity = float(request.form['noise_lacunarity'])
+
+    tile_width = int(request.form['tile_width'])
+    tile_height = int(request.form['tile_height'])
+    texture_type = request.form['texture_type']
+
     colour = request.form['colours']
     colours_json = json.loads(colour)
 
-    new_img = proc_tex.noise_texture([300, 300], colours_json, base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
+    if texture_type == 'noise':
+        new_img = proc_tex.noise_texture([tile_width, tile_height], colours_json, base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
+    else:
+        brick_width = int(request.form['brick_width'])
+        brick_height = int(request.form['brick_height'])
+        mortar_size = int(request.form['mortar_size'])
+
+        new_img = proc_tex.generate_brick_texture([tile_width, tile_height], 
+                                                  base_frequency, 
+                                                  cell_size, 
+                                                  noise_octaves, 
+                                                  noise_persistance, 
+                                                  noise_lacunarity,
+                                                  brick_width,
+                                                  brick_height,
+                                                  mortar_size)
+    
     img_io = BytesIO()
     new_img.save(img_io, 'PNG')
     img_io.seek(0)
