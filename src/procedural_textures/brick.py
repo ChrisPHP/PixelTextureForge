@@ -15,7 +15,7 @@ def are_bricks_divisible(width, height, brick_width, brick_height, mortar_size):
         if increment_width:
             brick_width += 1
         else:
-            brick_width -= 1
+            brick_width -= 1    
 
     while height % (brick_height + mortar_size) != 0:
         if brick_height >= height:
