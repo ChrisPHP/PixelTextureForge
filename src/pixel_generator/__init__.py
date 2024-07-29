@@ -113,7 +113,7 @@ class PixelGenerator:
         img = img.resize((new_width, new_height))
 
         img_array = np.array(img)
-        quantized, _ = self.get_colour_palette
+        quantized, _ = self.get_colour_palette(img_array, num_colours)
 
         quantized = quantized.reshape(img_array.shape)
         for i in range(0, new_height, pixel_size):
