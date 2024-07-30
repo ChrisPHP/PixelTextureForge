@@ -76,24 +76,25 @@ def create_brick_texture(width, height, noise, brick_width, brick_height, mortar
     open_cv_image = brick_array[:, :, ::-1].copy()
     
     edges = cv2.Canny(open_cv_image, 100, 200)
-    kernel = np.ones((10,10), np.uint8)
+    kernel = np.ones((2,2), np.uint8)
     dilated_edges = cv2.dilate(edges, kernel, iterations=2)
-
+    distance = cv2.distanceTransform(255 - dilated_edges, cv2.DIST_L2, 5)
+    gradient = np.clip(1 - distance / 10, 0, 1)
 
     noise_height, noise_width = noise.shape
     tiled_noise = np.tile(noise, (height // noise_height + 1, width // noise_width + 1))
     tiled_noise = tiled_noise[:height, :width]
 
+    edge_noise = np.copy(tiled_noise)
+    edge_noise = edge_noise * gradient
+    alpha_mask = (edge_noise > 0.2).astype(float)
+
     mask_with_noise = brick_array.copy()
 
-    noise_threshold = 0.6
 
     for i in range(3):
         brick_colour_array[:,:,i] = np.clip(brick_colour_array[:,:,i].astype(np.float32) + tiled_noise * 30, 0, 255).astype(np.uint8)
-        
-        noise_mask = (tiled_noise > noise_threshold) & (dilated_edges > 0)
-        mask_with_noise[noise_mask] = 255 - mask_with_noise[noise_mask]
-
+        mask_with_noise[:,:,i] = np.clip(mask_with_noise[:,:,i].astype(np.float32) + alpha_mask * 200, 0, 255).astype(np.uint8)
 
     color_coverted = cv2.cvtColor(mask_with_noise, cv2.COLOR_BGR2RGBA) 
     
