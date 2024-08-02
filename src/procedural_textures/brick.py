@@ -110,11 +110,20 @@ def create_brick_texture(width, height, noise, brick_width, brick_height, mortar
     edge_noise = edge_noise * gradient
     alpha_mask = (edge_noise > 0.2).astype(float)
 
+    #Add target threshold for interpolating noise
+    target_color = np.array([255, 255, 0.0, 255])
+    threshold = 0.5
+    noise_thresholded = np.clip(tiled_noise - threshold, 0, 1) / (1 - threshold)
+
     #Apply noise to image
     mask_with_noise = brick_array.copy()
+    interpolated = brick_colour_array.copy()
     for i in range(3):
-        brick_colour_array[:,:,i] = np.clip(brick_colour_array[:,:,i].astype(np.float32) + tiled_noise * 30, 0, 255).astype(np.uint8)
+        interpolated[:, :, i] = brick_colour_array[:, :, i] * (1 - noise_thresholded) + target_color[i] * noise_thresholded
+        #brick_colour_array[:,:,i] = np.clip(brick_colour_array[:,:,i].astype(np.float32) + tiled_noise * 10, 0, 255).astype(np.uint8)
         mask_with_noise[:,:,i] = np.clip(mask_with_noise[:,:,i].astype(np.float32) + alpha_mask * 200, 0, 255).astype(np.uint8)
+
+    print(interpolated)
 
     #Composite images together
     color_coverted = cv2.cvtColor(mask_with_noise, cv2.COLOR_BGR2RGBA) 
@@ -132,7 +141,7 @@ def create_brick_texture(width, height, noise, brick_width, brick_height, mortar
             new_comp.append(item)
             
     comp.putdata(new_comp)
-    colour_img = Image.fromarray(brick_colour_array.astype('uint8'))
+    colour_img = Image.fromarray(interpolated.astype('uint8'))
     comp = Image.composite(comp, colour_img, comp)
 
     return comp
