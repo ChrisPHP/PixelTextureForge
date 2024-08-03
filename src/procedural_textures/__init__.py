@@ -49,8 +49,13 @@ class ProceduralTextures:
 
         return noise_2d
     
-    def noise_texture(self, img_size, colours, baseFrequency, cellSize, octaves, persistance, lacunarity):
-        noise_array = self.generate_noise(img_size, baseFrequency, cellSize, octaves, persistance, lacunarity)
+    def noise_texture(self, img_size, colours, noise_params):
+        noise_array = self.generate_noise(img_size, 
+                                          noise_params['base_frequency'], 
+                                          noise_params['cell_size'],
+                                          noise_params['noise_octaves'], 
+                                          noise_params['noise_persistance'], 
+                                          noise_params['noise_lacunarity'])
 
         width = img_size[0]
         height = img_size[1]
@@ -120,6 +125,13 @@ class ProceduralTextures:
         return Image.fromarray(img_array.astype('uint8'))
 
 
-    def generate_brick_texture(self, img_size, base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity, brick_width, brick_height, mortar_size):
-        noise_array = self.generate_noise(img_size, base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
-        return brick.create_brick_texture(img_size[0], img_size[1], noise_array, brick_width, brick_height, mortar_size)
+    def generate_brick_texture(self, img_size, colours, noise_params, brick_size, mortar_size, mortar_colour):
+        colours = np.array(colours)
+        colours = np.append(colours, np.full((colours.shape[0], 1), 255), axis=1)
+        noise_array = self.generate_noise(img_size, 
+                                          noise_params['base_frequency'], 
+                                          noise_params['cell_size'],
+                                          noise_params['noise_octaves'], 
+                                          noise_params['noise_persistance'], 
+                                          noise_params['noise_lacunarity'])
+        return brick.create_brick_texture(img_size, colours, noise_array, brick_size, mortar_size, mortar_colour)

@@ -39,7 +39,7 @@ def random_brick_colour(base_colour, variation=10):
     return (new_r, new_g, new_b, a)
 
 
-def create_brick_texture(width, height, noise, brick_width, brick_height, mortar_size):
+def create_brick_texture(img_size, colours, noise, brick_size, mortar_size, mortar_colour):
     def get_mortar_gradient(size, img_array):
         kernel_size = round(size / 2)
         open_cv_image = img_array[:, :, ::-1].copy()
@@ -51,10 +51,15 @@ def create_brick_texture(width, height, noise, brick_width, brick_height, mortar
         gradient = np.clip(1 - distance / size, 0, 1)
         return gradient
 
+    width = img_size[0]
+    height = img_size[1]
+    brick_width = brick_size[0]
+    brick_height = brick_size[1]
+
     mask_brick_colour = (0, 0, 0, 0)
     mask_mortar_colour = (255, 255, 255, 255)
-    base_brick_colour = (180, 80, 80, 255)
-    mortar_colour = (200, 200, 200, 255)
+    base_brick_colour = colours[0]
+    mortar_colour = mortar_colour
 
     brick_width, brick_height = are_bricks_divisible(width, height, brick_width, brick_height, mortar_size)
 
@@ -111,7 +116,7 @@ def create_brick_texture(width, height, noise, brick_width, brick_height, mortar
     alpha_mask = (edge_noise > 0.2).astype(float)
 
     #Add target threshold for interpolating noise
-    target_color = np.array([255, 255, 0.0, 255])
+    target_color = colours[5]
     threshold = 0.5
     noise_thresholded = np.clip(tiled_noise - threshold, 0, 1) / (1 - threshold)
 
@@ -122,8 +127,6 @@ def create_brick_texture(width, height, noise, brick_width, brick_height, mortar
         interpolated[:, :, i] = brick_colour_array[:, :, i] * (1 - noise_thresholded) + target_color[i] * noise_thresholded
         #brick_colour_array[:,:,i] = np.clip(brick_colour_array[:,:,i].astype(np.float32) + tiled_noise * 10, 0, 255).astype(np.uint8)
         mask_with_noise[:,:,i] = np.clip(mask_with_noise[:,:,i].astype(np.float32) + alpha_mask * 200, 0, 255).astype(np.uint8)
-
-    print(interpolated)
 
     #Composite images together
     color_coverted = cv2.cvtColor(mask_with_noise, cv2.COLOR_BGR2RGBA) 

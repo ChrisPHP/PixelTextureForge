@@ -126,6 +126,8 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('brick_width', document.getElementById('brickWidth').value);
             formData.append('brick_height', document.getElementById('brickHeight').value);
             formData.append('mortar_size', document.getElementById('mortarSize').value);
+            formData.append('mortar_colour', document.getElementById('mortarChosenColour').value);
+            console.log(formData)
         }
         
         formData.append('tile_width', document.getElementById('noiseWidth').value);

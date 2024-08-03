@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
@@ -166,6 +169,8 @@
                     </li>
                     <div id="brick-details">
                         <h2>Brick Info</h2>
+                        <p>Mortar Colour</p>
+                        <input class="colour-input" type="color" id="mortarChosenColour" name="mortarChosenColour" value="#ff0000">
                         <p>Brick Width:</p>
                         <input type="number" id="brickWidth" name="brickWidth" value="10" min="1">
                         <p>Brick Height:</p>
