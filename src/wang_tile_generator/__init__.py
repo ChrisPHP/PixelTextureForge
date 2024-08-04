@@ -5,6 +5,9 @@ from . import brickborder
 
 
 class WangTilesGenerator:
+    def __init__(self, border_dict = {}) -> None:
+        self.border_dict = border_dict
+
     def generate_wang_tile(self, img):
         img = img.convert('RGBA')
         height, width = img.size
@@ -153,109 +156,109 @@ class WangTilesGenerator:
 
 
         available_width = div_width + margin - div_width
-
+        available_height = div_height + margin - div_height
 
         for y in range(height):
             for x in range(width):
                 if x < div_width + margin and x >= div_width:
-                    top[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                    top[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 else:
                     top[x, y] = (0, 0, 0, 0)
 
                 if x >= div_width and y >=  div_height:
                     if y <= div_height+margin or x < div_width+margin:
-                        top_left[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        top_left[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                     else:
                         top_left[x, y] = (0, 0, 0, 0)
 
                 if x >= div_width and y <=  div_height:
                     if y > div_height-margin or x < div_width+margin:
-                        top_right[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        top_right[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                     else:
                         top_right[x, y] = (0, 0, 0, 0)
 
 
                 if y <= div_height and y > div_height-margin:
-                    right[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                    right[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 else:
                     right[x, y] = (0, 0, 0, 0)
 
                 if y >= div_height and y < div_height+margin:
-                    left[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                    left[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 else:
                     left[x, y] = (0, 0, 0, 0)
 
 
                 if x <= div_width  and y >=  div_height:
                     if y < div_height+margin or x > div_width-margin:
-                        bottom_left[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        bottom_left[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                     else:
                         bottom_left[x, y] = (0, 0, 0, 0)
 
                 if x <= div_width  and y <=  div_height:
                     if y > div_height-margin or x > div_width-margin:
-                        bottom_right[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        bottom_right[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                     else:
                         bottom_right[x, y] = (0, 0, 0, 0)
 
                 if x <= div_width and x > div_height-margin:
-                    bottom[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                    bottom[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 else:
                     bottom[x, y] = (0, 0, 0, 0)
 
 
                 if x <= div_width and y <=  div_height:
                     if y > div_height-margin or x > div_width-margin:
-                        bottom_right_top_left[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        bottom_right_top_left[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 elif x >= div_width and y >=  div_height:
                     if y < div_height+margin or x < div_width+margin:
-                        bottom_right_top_left[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        bottom_right_top_left[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 else:
                     bottom_right_top_left[x, y] = (0, 0, 0, 0)
 
                 if x <= div_width and y >=  div_height:
                     if y < div_height+margin or x > div_width-margin:
-                        bottom_left_top_right[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        bottom_left_top_right[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 elif x >= div_width and y <=  div_height:
                     if y > div_height-margin or x < div_width+margin:
-                        bottom_left_top_right[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        bottom_left_top_right[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 else:
                     bottom_left_top_right[x, y] = (0, 0, 0, 0)
 
 
                 if y >= div_height:
                     if y < div_height+margin and x < div_width+margin:
-                        corner_bottom_right[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        corner_bottom_right[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 elif x >= div_width and y <=  div_height:
                     if x < div_width+margin:
-                        corner_bottom_right[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        corner_bottom_right[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 else:
                     corner_bottom_right[x, y] = (0, 0, 0, 0)
 
                 if y >= div_height:
                     if y < div_height+margin and x > div_width-margin:
-                        corner_top_right[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        corner_top_right[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 elif x <= div_width and y <= div_height:
                     if x > div_width-margin:
-                        corner_top_right[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        corner_top_right[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 else:
                     corner_top_right[x, y] = (0, 0, 0, 0)
 
                 if y <= div_height:
                     if y > div_height-margin and x < div_width+margin:
-                        corner_bottom_left[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        corner_bottom_left[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 elif x >= div_width and y >=  div_height:
                     if x < div_width+margin:
-                        corner_bottom_left[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        corner_bottom_left[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 else:
                     corner_bottom_left[x, y] = (0, 0, 0, 0)
 
                 if y <= div_height:
                     if y > div_height-margin and x > div_width-margin:
-                        corner_top_left[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        corner_top_left[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 elif x <= div_width and y >=  div_height:
                     if x > div_width-margin:
-                        corner_top_left[x, y] = self.border_style(available_width, div_width, x, y, colour, border_type)
+                        corner_top_left[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                 else:
                     corner_top_left[x, y] = (0, 0, 0, 0)
 
@@ -266,11 +269,9 @@ class WangTilesGenerator:
 
         return Image.fromarray(grid_image.astype('uint8'))
     
-
-    @staticmethod
-    def border_style(available_width, div_width, x, y, colour, border_type):
-        if border_type == "brick":
-            return brickborder.brick_border(available_width, div_width, x, y, colour)
+    def border_style(self, available_width, available_height, div_height, div_width, x, y, colour, border_type):
+        if border_type == "brickborder":
+            return brickborder.brick_border(available_width, available_height, div_width,div_height, x, y, colour, self.border_dict)
         else:
             return colour
     

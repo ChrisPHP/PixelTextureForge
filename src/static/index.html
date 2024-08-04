@@ -102,15 +102,29 @@
                     <button id="wangBorders" class="pure-button pure-button-primary">Run</button>
                     <li class="pure-menu-item">
                         <p>Border Style:</p>
-                        <select id="borderStyle" name="borderStyle">
+                        <select id="borderStyle" name="borderStyle">    
                             <option value="flat">flat</option>
-                            <option value="brick">Brick</option>
+                            <option value="brickborder">Brick</option>
                         </select>
                     </li>
                     <li class="pure-menu-item">
                         <p>Border Size:</p>
                         <input type="number" id="borderSize" name="borderSize" value="75" min="1" >
                     </li>
+                    <div id="brickborder-details">
+                        <li class="pure-menu-item">
+                            <p>Percent Width</p>
+                            <input type="number" id="brickBorderWidth" name="brickBorderWidth" value="50" min="1" max="100">
+                        </li>
+                        <li class="pure-menu-item">
+                            <p>Percent Height</p>
+                            <input type="number" id="brickBorderHeight" name="brickBorderHeight" value="50" min="1" max="100">
+                        </li>
+                        <li class="pure-menu-item">
+                            <p>Mortar Percent</p>
+                            <input type="number" id="mortarBorder" name="mortarBorder" value="10" min="1" max="100">
+                        </li>
+                    </div>
                 </div>
                 <div id="procedural-sidebar">
                     <h2>Generate Texture</h2>

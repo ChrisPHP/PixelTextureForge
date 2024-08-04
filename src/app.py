@@ -21,7 +21,6 @@ app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
 pixel_gen = pixel_generator.PixelGenerator()
 proc_tex = procedural_textures.ProceduralTextures()
-wang_tile = wang_tile_generator.WangTilesGenerator()
 
 @app.route('/')
 def home():
@@ -38,7 +37,20 @@ def wang_borders():
     border_size = int(request.form['border_size'])
     border_style = request.form['border_style']
 
-    new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
+    if border_style == 'brickborder':
+        brick_border_width = int(request.form['brick_border_width'])
+        brick_border_height = int(request.form['brick_border_height'])
+        mortar_border = int(request.form['mortar_border'])
+
+        wang_tile = wang_tile_generator.WangTilesGenerator(border_dict={
+            'brick_border_width': brick_border_width,
+            'brick_border_height': brick_border_height,
+            'mortar_border': mortar_border
+        })
+        new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
+    else:
+        wang_tile = wang_tile_generator.WangTilesGenerator()
+        new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
     img_io = BytesIO()
     new_img.save(img_io, 'PNG')
     img_io.seek(0)
@@ -48,6 +60,8 @@ def wang_borders():
 @app.route('/wang_tiles',  methods=['POST'])
 def wang_tiles():
     img = verify_file(request)
+
+    wang_tile = wang_tile_generator.WangTilesGenerator()
 
     new_img = wang_tile.generate_wang_tile(img)
     img_io = BytesIO()

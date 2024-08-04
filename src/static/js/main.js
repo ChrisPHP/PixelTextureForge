@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Header Buttons
 
     const sidebarIds = ['seamless', 'wang', 'pixel', 'procedural', 'colours'];
-    const detailsId = ['brick'];
+    const detailsId = ['brick', 'brickborder'];
 
     function toggleDetails(activeId) {
         detailsId.forEach(id => {
@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('textureOption').addEventListener('change', function(event) {
        toggleDetails(event.target.value);
     });
+
+    document.getElementById('borderStyle').addEventListener('change', function(event) {
+        toggleDetails(event.target.value);
+     });
 
     function toggleSidebar(activeId) {
         sidebarIds.forEach(id => {
@@ -127,7 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('brick_height', document.getElementById('brickHeight').value);
             formData.append('mortar_size', document.getElementById('mortarSize').value);
             formData.append('mortar_colour', document.getElementById('mortarChosenColour').value);
-            console.log(formData)
         }
         
         formData.append('tile_width', document.getElementById('noiseWidth').value);
@@ -184,6 +187,15 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append('height', img_height);
         formData.append('border_size', document.getElementById('borderSize').value);
         formData.append('border_style', document.getElementById('borderStyle').value);
+
+        border_style =  document.getElementById('borderStyle').value;
+        formData.append('border_style', border_style);
+
+        if (border_style == 'brickborder') {
+            formData.append('brick_border_width', document.getElementById('brickBorderWidth').value);
+            formData.append('brick_border_height', document.getElementById('brickBorderHeight').value);
+            formData.append('mortar_border', document.getElementById('mortarBorder').value);
+        }
 
         fetch_command('/wang_borders', formData);
     });
