@@ -140,13 +140,15 @@ def procedural_texture():
         brick_width = int(request.form['brick_width'])
         brick_height = int(request.form['brick_height'])
         mortar_size = int(request.form['mortar_size'])
+        threshold = float(request.form['threshold'])
 
         new_img = proc_tex.generate_brick_texture([tile_width, tile_height],
                                                   colours_json, 
                                                   noise_params,
                                                   [brick_width, brick_height],
                                                   mortar_size,
-                                                  ImageColor.getrgb(mortar_colour))
+                                                  ImageColor.getrgb(mortar_colour),
+                                                  threshold)
     
     img_io = BytesIO()
     new_img.save(img_io, 'PNG')

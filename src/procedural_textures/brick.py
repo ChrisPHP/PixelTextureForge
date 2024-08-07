@@ -39,7 +39,7 @@ def random_brick_colour(base_colour, variation=10):
     return (new_r, new_g, new_b, a)
 
 
-def create_brick_texture(img_size, colours, noise, brick_size, mortar_size, mortar_colour):
+def create_brick_texture(img_size, colours, noise, brick_size, mortar_size, mortar_colour, threshold):
     def get_mortar_gradient(size, img_array):
         kernel_size = round(size / 2)
         open_cv_image = img_array[:, :, ::-1].copy()
@@ -117,12 +117,12 @@ def create_brick_texture(img_size, colours, noise, brick_size, mortar_size, mort
 
     #Add target threshold for interpolating noise
     target_color = colours[4]
-    threshold = 0.5
     noise_thresholded = np.clip(tiled_noise - threshold, 0, 1) / (1 - threshold)
 
     #Apply noise to image
     mask_with_noise = brick_array.copy()
     interpolated = brick_colour_array.copy()
+    
     for i in range(3):
         interpolated[:, :, i] = brick_colour_array[:, :, i] * (1 - noise_thresholded) + target_color[i] * noise_thresholded
         #brick_colour_array[:,:,i] = np.clip(brick_colour_array[:,:,i].astype(np.float32) + tiled_noise * 10, 0, 255).astype(np.uint8)

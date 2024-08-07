@@ -131,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('brick_height', document.getElementById('brickHeight').value);
             formData.append('mortar_size', document.getElementById('mortarSize').value);
             formData.append('mortar_colour', document.getElementById('mortarChosenColour').value);
+            formData.append('threshold', document.getElementById('brickColourThreshold').value);
         } else if (texture_type == 'noise') {
             formData.append('threshold_1', document.getElementById('colour1Threshold').value);
             formData.append('threshold_2', document.getElementById('colour2Threshold').value);
