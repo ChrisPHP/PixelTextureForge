@@ -49,7 +49,7 @@ class ProceduralTextures:
 
         return noise_2d
     
-    def noise_texture(self, img_size, colours, noise_params):
+    def noise_texture(self, img_size, colours, thresholds, noise_params):
         noise_array = self.generate_noise(img_size, 
                                           noise_params['base_frequency'], 
                                           noise_params['cell_size'],
@@ -62,7 +62,7 @@ class ProceduralTextures:
 
         new_colours = np.array(colours) / 255.0
 
-        thresholds = np.array([0.15, 0.3, 0.45, 0.6, 0.75, 1.0])
+        thresholds = np.sort(np.array(thresholds))
 
         color_noise = np.zeros((*(width, height), 3))
         for i in range(3):

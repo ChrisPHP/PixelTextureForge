@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Header Buttons
 
     const sidebarIds = ['seamless', 'wang', 'pixel', 'procedural', 'colours'];
-    const detailsId = ['brick', 'brickborder'];
+    const detailsId = ['brick', 'brickborder', 'noise'];
 
     function toggleDetails(activeId) {
         detailsId.forEach(id => {
@@ -131,6 +131,12 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('brick_height', document.getElementById('brickHeight').value);
             formData.append('mortar_size', document.getElementById('mortarSize').value);
             formData.append('mortar_colour', document.getElementById('mortarChosenColour').value);
+        } else if (texture_type == 'noise') {
+            formData.append('threshold_1', document.getElementById('colour1Threshold').value);
+            formData.append('threshold_2', document.getElementById('colour2Threshold').value);
+            formData.append('threshold_3', document.getElementById('colour3Threshold').value);
+            formData.append('threshold_4', document.getElementById('colour4Threshold').value);
+            formData.append('threshold_5', document.getElementById('colour5Threshold').value);
         }
         
         formData.append('tile_width', document.getElementById('noiseWidth').value);
@@ -146,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
         val = val.toUpperCase();
         chosen_colour = val.slice(1);
 
-        const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=6';
+        const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=5';
         const palette = await colour_palette_fetch(url);
         formData.append('colours', palette);
 
@@ -202,12 +208,18 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('noise_persistance', document.getElementById('noisePersistance').value);
             formData.append('noise_lacunarity', document.getElementById('noiseLacunarity').value);
 
+            formData.append('threshold_1', document.getElementById('colour1Threshold').value);
+            formData.append('threshold_2', document.getElementById('colour2Threshold').value);
+            formData.append('threshold_3', document.getElementById('colour3Threshold').value);
+            formData.append('threshold_4', document.getElementById('colour4Threshold').value);
+            formData.append('threshold_5', document.getElementById('colour5Threshold').value);
+
             palette_mode = document.getElementById('paletteNoise').value;
             val = document.getElementById('noiseChosenColour').value;
             val = val.toUpperCase();
             chosen_colour = val.slice(1);
 
-            const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=6';
+            const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=5';
             const palette = await colour_palette_fetch(url);
             formData.append('colours', palette);
         }

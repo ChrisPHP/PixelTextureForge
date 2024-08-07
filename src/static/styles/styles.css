@@ -82,6 +82,10 @@
   display: none;
 }
 
+#noise-details {
+  display: block;
+}
+
 #brickborder-details {
   display: none;
 }

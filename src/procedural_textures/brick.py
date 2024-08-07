@@ -116,7 +116,7 @@ def create_brick_texture(img_size, colours, noise, brick_size, mortar_size, mort
     alpha_mask = (edge_noise > 0.2).astype(float)
 
     #Add target threshold for interpolating noise
-    target_color = colours[5]
+    target_color = colours[4]
     threshold = 0.5
     noise_thresholded = np.clip(tiled_noise - threshold, 0, 1) / (1 - threshold)
 

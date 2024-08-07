@@ -58,7 +58,15 @@ def wang_borders():
             "noise_persistance": float(request.form['noise_persistance']),
             "noise_lacunarity": float(request.form['noise_lacunarity'])
         }
-        new_img = proc_tex.noise_texture([width, height], colours_json, noise_params)
+        thresholds = [
+            float(request.form['threshold_1']),
+            float(request.form['threshold_2']),
+            float(request.form['threshold_3']),
+            float(request.form['threshold_4']),
+            float(request.form['threshold_5'])
+        ]
+
+        new_img = proc_tex.noise_texture([width, height], colours_json, thresholds, noise_params)
         new_img = new_img.convert('RGBA')
 
         wang_tile = wang_tile_generator.WangTilesGenerator(input_border_img=new_img.load())
@@ -118,7 +126,15 @@ def procedural_texture():
         "noise_lacunarity": float(request.form['noise_lacunarity'])
     }
     if texture_type == 'noise':
-        new_img = proc_tex.noise_texture([tile_width, tile_height], colours_json, noise_params)
+        thresholds = [
+            float(request.form['threshold_1']),
+            float(request.form['threshold_2']),
+            float(request.form['threshold_3']),
+            float(request.form['threshold_4']),
+            float(request.form['threshold_5'])
+        ]
+
+        new_img = proc_tex.noise_texture([tile_width, tile_height], colours_json, thresholds, noise_params)
     else:
         mortar_colour = request.form['mortar_colour']
         brick_width = int(request.form['brick_width'])
