@@ -3,10 +3,10 @@ from PIL import Image
 
 from . import brickborder
 
-
 class WangTilesGenerator:
-    def __init__(self, border_dict = {}) -> None:
+    def __init__(self, border_dict = {}, input_border_img = None) -> None:
         self.border_dict = border_dict
+        self.input_border_img = input_border_img
 
     def generate_wang_tile(self, img):
         img = img.convert('RGBA')
@@ -166,7 +166,7 @@ class WangTilesGenerator:
                     top[x, y] = (0, 0, 0, 0)
 
                 if x >= div_width and y >=  div_height:
-                    if y <= div_height+margin or x < div_width+margin:
+                    if y < div_height+margin or x < div_width+margin:
                         top_left[x, y] = self.border_style(available_width, available_height, div_width, div_height,x, y, colour, border_type)
                     else:
                         top_left[x, y] = (0, 0, 0, 0)
@@ -268,10 +268,12 @@ class WangTilesGenerator:
         grid_image = np.concatenate((top_row, mmiddle_row, bottom_row), axis=0)
 
         return Image.fromarray(grid_image.astype('uint8'))
-    
+
     def border_style(self, available_width, available_height, div_height, div_width, x, y, colour, border_type):
         if border_type == "brickborder":
             return brickborder.brick_border(available_width, available_height, div_width,div_height, x, y, colour, self.border_dict)
+        elif border_type == 'noise':
+            return self.input_border_img[x,y]
         else:
             return colour
     

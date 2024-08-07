@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch_command('/wang_tiles', formData);
     });
 
-    document.getElementById('wangBorders').addEventListener('click', function(event) {        
+    document.getElementById('wangBorders').addEventListener('click', async function(event) {        
         const formData = new FormData();
         formData.append('image', selectedFile);
         formData.append('width', img_width);
@@ -195,6 +195,21 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('brick_border_width', document.getElementById('brickBorderWidth').value);
             formData.append('brick_border_height', document.getElementById('brickBorderHeight').value);
             formData.append('mortar_border', document.getElementById('mortarBorder').value);
+        } else if (border_style == 'noise') {
+            formData.append('base_frequency', document.getElementById('baseFrequency').value);
+            formData.append('cell_size', document.getElementById('cellSize').value);
+            formData.append('noise_octaves', document.getElementById('noiseOctaves').value);
+            formData.append('noise_persistance', document.getElementById('noisePersistance').value);
+            formData.append('noise_lacunarity', document.getElementById('noiseLacunarity').value);
+
+            palette_mode = document.getElementById('paletteNoise').value;
+            val = document.getElementById('noiseChosenColour').value;
+            val = val.toUpperCase();
+            chosen_colour = val.slice(1);
+
+            const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=6';
+            const palette = await colour_palette_fetch(url);
+            formData.append('colours', palette);
         }
 
         fetch_command('/wang_borders', formData);

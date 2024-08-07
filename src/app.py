@@ -48,6 +48,21 @@ def wang_borders():
             'mortar_border': mortar_border
         })
         new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
+    elif border_style == 'noise':
+        colour = request.form['colours']
+        colours_json = json.loads(colour)
+        noise_params = {
+            "base_frequency": float(request.form['base_frequency']),
+            "cell_size": int(request.form['cell_size']),
+            "noise_octaves": int(request.form['noise_octaves']),
+            "noise_persistance": float(request.form['noise_persistance']),
+            "noise_lacunarity": float(request.form['noise_lacunarity'])
+        }
+        new_img = proc_tex.noise_texture([width, height], colours_json, noise_params)
+        new_img = new_img.convert('RGBA')
+
+        wang_tile = wang_tile_generator.WangTilesGenerator(input_border_img=new_img.load())
+        new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
     else:
         wang_tile = wang_tile_generator.WangTilesGenerator()
         new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
