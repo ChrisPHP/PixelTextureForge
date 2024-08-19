@@ -43,11 +43,23 @@ def wang_borders():
         mortar_border = int(request.form['mortar_border'])
 
         wang_tile = wang_tile_generator.WangTilesGenerator(border_dict={
-            'brick_border_width': brick_border_width,
+            'brick_border_width': brick_border_width,   
             'brick_border_height': brick_border_height,
             'mortar_border': mortar_border
         })
         new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
+    elif border_style == 'noise_mask':
+        base_frequency = float(request.form['base_frequency'])
+        cell_size =int(request.form['cell_size'])
+        noise_octaves = int(request.form['noise_octaves'])
+        noise_persistance = float(request.form['noise_persistance'])
+        noise_lacunarity = float(request.form['noise_lacunarity'])
+
+        noise_2d = proc_tex.generate_noise([width,height],base_frequency,cell_size,noise_octaves,noise_persistance,noise_lacunarity)
+
+        #black_image = Image.new('RGBA', (width, height), color='black')
+        wang_tile = wang_tile_generator.WangTilesGenerator(noise_img=noise_2d, border_dict={'border_size': border_size})
+        new_img = wang_tile.generate_mask_border(img)
     elif border_style == 'noise':
         colour = request.form['colours']
         colours_json = json.loads(colour)
@@ -86,7 +98,7 @@ def wang_tiles():
 
     wang_tile = wang_tile_generator.WangTilesGenerator()
 
-    new_img = wang_tile.generate_wang_tile(img)
+    new_img = wang_tile.generate_wang_tile(img, False)
     img_io = BytesIO()
     new_img.save(img_io, 'PNG')
     img_io.seek(0)

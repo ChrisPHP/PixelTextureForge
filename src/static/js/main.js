@@ -193,7 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append('width', img_width);
         formData.append('height', img_height);
         formData.append('border_size', document.getElementById('borderSize').value);
-        formData.append('border_style', document.getElementById('borderStyle').value);
 
         border_style =  document.getElementById('borderStyle').value;
         formData.append('border_style', border_style);
@@ -223,6 +222,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=5';
             const palette = await colour_palette_fetch(url);
             formData.append('colours', palette);
+        } else if (border_style == "noise_mask") {
+            formData.append('base_frequency', document.getElementById('baseFrequency').value);
+            formData.append('cell_size', document.getElementById('cellSize').value);
+            formData.append('noise_octaves', document.getElementById('noiseOctaves').value);
+            formData.append('noise_persistance', document.getElementById('noisePersistance').value);
+            formData.append('noise_lacunarity', document.getElementById('noiseLacunarity').value);
         }
 
         fetch_command('/wang_borders', formData);

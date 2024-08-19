@@ -66,7 +66,6 @@ class ProceduralTextures:
 
         color_noise = np.zeros((*(width, height), 3))
         for i in range(3):
-            #color_noise[:,:,i] = noise_array * (green[i] - brown[i]) + brown[i]
             color_noise[:,:,i] = np.interp(noise_array, thresholds, new_colours[:, i])
 
         pic = (color_noise * 255).astype(np.uint8)
