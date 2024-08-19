@@ -2,6 +2,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // Header Buttons
 
     const sidebarIds = ['seamless', 'wang', 'pixel', 'procedural', 'colours'];
+    const detailsId = ['brick', 'brickborder', 'noise'];
+
+    function toggleDetails(activeId) {
+        detailsId.forEach(id => {
+            const details = document.getElementById(`${id}-details`);
+            details.style.display = id === activeId ? 'block' : 'none';
+        });
+    }
+
+    document.getElementById('textureOption').addEventListener('change', function(event) {
+       toggleDetails(event.target.value);
+    });
+
+    document.getElementById('borderStyle').addEventListener('change', function(event) {
+        toggleDetails(event.target.value);
+     });
 
     function toggleSidebar(activeId) {
         sidebarIds.forEach(id => {
@@ -75,8 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (selectedFile) {
             const formData = new FormData();
             formData.append('image', selectedFile);
-            formData.append('tile_width', document.getElementById('tileWidth').value)
-            formData.append('tile_height', document.getElementById('tileHeight').value)
+            formData.append('tile_width', document.getElementById('tileWidth').value);
+            formData.append('tile_height', document.getElementById('tileHeight').value);
 
             fetch_command('/seamless', formData);
         }
@@ -105,13 +121,41 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    document.getElementById('generateNoise').addEventListener('click', function(event) {
+    document.getElementById('generateNoise').addEventListener('click', async function(event) {
         const formData = new FormData();
+        const texture_type =  document.getElementById('textureOption').value;
+
+        formData.append('texture_type', texture_type);
+        if (texture_type == 'brick')  {
+            formData.append('brick_width', document.getElementById('brickWidth').value);
+            formData.append('brick_height', document.getElementById('brickHeight').value);
+            formData.append('mortar_size', document.getElementById('mortarSize').value);
+            formData.append('mortar_colour', document.getElementById('mortarChosenColour').value);
+            formData.append('threshold', document.getElementById('brickColourThreshold').value);
+        } else if (texture_type == 'noise') {
+            formData.append('threshold_1', document.getElementById('colour1Threshold').value);
+            formData.append('threshold_2', document.getElementById('colour2Threshold').value);
+            formData.append('threshold_3', document.getElementById('colour3Threshold').value);
+            formData.append('threshold_4', document.getElementById('colour4Threshold').value);
+            formData.append('threshold_5', document.getElementById('colour5Threshold').value);
+        }
+        
+        formData.append('tile_width', document.getElementById('noiseWidth').value);
+        formData.append('tile_height', document.getElementById('noiseHeight').value);
         formData.append('base_frequency', document.getElementById('baseFrequency').value);
         formData.append('cell_size', document.getElementById('cellSize').value);
         formData.append('noise_octaves', document.getElementById('noiseOctaves').value);
         formData.append('noise_persistance', document.getElementById('noisePersistance').value);
         formData.append('noise_lacunarity', document.getElementById('noiseLacunarity').value);
+
+        palette_mode = document.getElementById('paletteNoise').value;
+        val = document.getElementById('noiseChosenColour').value;
+        val = val.toUpperCase();
+        chosen_colour = val.slice(1);
+
+        const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=5';
+        const palette = await colour_palette_fetch(url);
+        formData.append('colours', palette);
 
         fetch_command('/procedural', formData);
     });
@@ -143,18 +187,53 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch_command('/wang_tiles', formData);
     });
 
-    document.getElementById('wangBorders').addEventListener('click', function(event) {        
+    document.getElementById('wangBorders').addEventListener('click', async function(event) {        
         const formData = new FormData();
         formData.append('image', selectedFile);
         formData.append('width', img_width);
         formData.append('height', img_height);
         formData.append('border_size', document.getElementById('borderSize').value);
-        formData.append('border_style', document.getElementById('borderStyle').value);
+
+        border_style =  document.getElementById('borderStyle').value;
+        formData.append('border_style', border_style);
+
+        if (border_style == 'brickborder') {
+            formData.append('brick_border_width', document.getElementById('brickBorderWidth').value);
+            formData.append('brick_border_height', document.getElementById('brickBorderHeight').value);
+            formData.append('mortar_border', document.getElementById('mortarBorder').value);
+        } else if (border_style == 'noise') {
+            formData.append('base_frequency', document.getElementById('baseFrequency').value);
+            formData.append('cell_size', document.getElementById('cellSize').value);
+            formData.append('noise_octaves', document.getElementById('noiseOctaves').value);
+            formData.append('noise_persistance', document.getElementById('noisePersistance').value);
+            formData.append('noise_lacunarity', document.getElementById('noiseLacunarity').value);
+
+            formData.append('threshold_1', document.getElementById('colour1Threshold').value);
+            formData.append('threshold_2', document.getElementById('colour2Threshold').value);
+            formData.append('threshold_3', document.getElementById('colour3Threshold').value);
+            formData.append('threshold_4', document.getElementById('colour4Threshold').value);
+            formData.append('threshold_5', document.getElementById('colour5Threshold').value);
+
+            palette_mode = document.getElementById('paletteNoise').value;
+            val = document.getElementById('noiseChosenColour').value;
+            val = val.toUpperCase();
+            chosen_colour = val.slice(1);
+
+            const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=5';
+            const palette = await colour_palette_fetch(url);
+            formData.append('colours', palette);
+        } else if (border_style == "noise_mask") {
+            formData.append('base_frequency', document.getElementById('baseFrequency').value);
+            formData.append('cell_size', document.getElementById('cellSize').value);
+            formData.append('noise_octaves', document.getElementById('noiseOctaves').value);
+            formData.append('noise_persistance', document.getElementById('noisePersistance').value);
+            formData.append('noise_lacunarity', document.getElementById('noiseLacunarity').value);
+        }
 
         fetch_command('/wang_borders', formData);
     });
 
-    document.getElementById('colourPalette').addEventListener('click', function(event) {        
+    document.getElementById('colourPalette').addEventListener('click', async function(event) {        
         palette_mode = document.getElementById('paletteMode').value;
         val = document.getElementById('chosenColour').value;
         val = val.toUpperCase();
@@ -162,38 +241,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const url = 'https://www.thecolorapi.com/scheme?hex='+chosen_colour+'&format=json&mode='+palette_mode+'&count=6';
 
-        palette = []
+        const palette = await colour_palette_fetch(url);
 
-        fetch(url)
-        .then(response => {
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+        formData.append('colours', palette);
+        formData.append('factor', document.getElementById('paletteFactor').value);
+
+        fetch_command('/colour_palette', formData);
+    });
+
+    async function colour_palette_fetch(url) {
+        palette = []
+        try {
+            const response = await fetch(url);
             if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json();
-        })
-        .then(data => {
-            col = data.colors;
-            for (var i = 0; i < col.length; i++) {
+
+            const data = await response.json();
+            const col = data.colors;
+
+            for (let i = 0; i < col.length; i++) {
                 palette.push([
-                    col[i].rgb.r,
-                    col[i].rgb.g,
-                    col[i].rgb.b
+                  col[i].rgb.r,
+                  col[i].rgb.g,
+                  col[i].rgb.b
                 ]);
             }
 
-            const paletteJSON = JSON.stringify(palette);
-
-            const formData = new FormData();
-            formData.append('image', selectedFile);
-            formData.append('colours', paletteJSON);
-            formData.append('factor', document.getElementById('paletteFactor').value);
-
-            fetch_command('/colour_palette', formData);
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
-    });
+            return JSON.stringify(palette);
+        } catch (error) {
+            throw error;
+        }
+    }
 
     function fetch_command(route_name, formData) {
         fetch(route_name, {

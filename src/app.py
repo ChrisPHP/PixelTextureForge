@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, send_file
-from werkzeug.utils import secure_filename
-from PIL import Image
+from PIL import Image, ImageColor
 from io import BytesIO
 import os
 import json
@@ -22,7 +21,6 @@ app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
 pixel_gen = pixel_generator.PixelGenerator()
 proc_tex = procedural_textures.ProceduralTextures()
-wang_tile = wang_tile_generator.WangTilesGenerator()
 
 @app.route('/')
 def home():
@@ -39,7 +37,55 @@ def wang_borders():
     border_size = int(request.form['border_size'])
     border_style = request.form['border_style']
 
-    new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
+    if border_style == 'brickborder':
+        brick_border_width = int(request.form['brick_border_width'])
+        brick_border_height = int(request.form['brick_border_height'])
+        mortar_border = int(request.form['mortar_border'])
+
+        wang_tile = wang_tile_generator.WangTilesGenerator(border_dict={
+            'brick_border_width': brick_border_width,   
+            'brick_border_height': brick_border_height,
+            'mortar_border': mortar_border
+        })
+        new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
+    elif border_style == 'noise_mask':
+        base_frequency = float(request.form['base_frequency'])
+        cell_size =int(request.form['cell_size'])
+        noise_octaves = int(request.form['noise_octaves'])
+        noise_persistance = float(request.form['noise_persistance'])
+        noise_lacunarity = float(request.form['noise_lacunarity'])
+
+        noise_2d = proc_tex.generate_noise([width,height],base_frequency,cell_size,noise_octaves,noise_persistance,noise_lacunarity)
+
+        #black_image = Image.new('RGBA', (width, height), color='black')
+        wang_tile = wang_tile_generator.WangTilesGenerator(noise_img=noise_2d, border_dict={'border_size': border_size})
+        new_img = wang_tile.generate_mask_border(img)
+    elif border_style == 'noise':
+        colour = request.form['colours']
+        colours_json = json.loads(colour)
+        noise_params = {
+            "base_frequency": float(request.form['base_frequency']),
+            "cell_size": int(request.form['cell_size']),
+            "noise_octaves": int(request.form['noise_octaves']),
+            "noise_persistance": float(request.form['noise_persistance']),
+            "noise_lacunarity": float(request.form['noise_lacunarity'])
+        }
+        thresholds = [
+            float(request.form['threshold_1']),
+            float(request.form['threshold_2']),
+            float(request.form['threshold_3']),
+            float(request.form['threshold_4']),
+            float(request.form['threshold_5'])
+        ]
+
+        new_img = proc_tex.noise_texture([width, height], colours_json, thresholds, noise_params)
+        new_img = new_img.convert('RGBA')
+
+        wang_tile = wang_tile_generator.WangTilesGenerator(input_border_img=new_img.load())
+        new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
+    else:
+        wang_tile = wang_tile_generator.WangTilesGenerator()
+        new_img = wang_tile.generate_wang_borders(width, height, border_size, border_style, avg_colour)
     img_io = BytesIO()
     new_img.save(img_io, 'PNG')
     img_io.seek(0)
@@ -50,7 +96,9 @@ def wang_borders():
 def wang_tiles():
     img = verify_file(request)
 
-    new_img = wang_tile.generate_wang_tile(img)
+    wang_tile = wang_tile_generator.WangTilesGenerator()
+
+    new_img = wang_tile.generate_wang_tile(img, False)
     img_io = BytesIO()
     new_img.save(img_io, 'PNG')
     img_io.seek(0)
@@ -75,13 +123,45 @@ def noise_image():
 
 @app.route('/procedural',  methods=['POST'])
 def procedural_texture():
-    base_frequency = float(request.form['base_frequency'])
-    cell_size = int(request.form['cell_size'])
-    noise_octaves = int(request.form['noise_octaves'])
-    noise_persistance = float(request.form['noise_persistance'])
-    noise_lacunarity = float(request.form['noise_lacunarity'])
+    tile_width = int(request.form['tile_width'])
+    tile_height = int(request.form['tile_height'])
+    texture_type = request.form['texture_type']
 
-    new_img = proc_tex.noise_texture([300, 300], base_frequency, cell_size, noise_octaves, noise_persistance, noise_lacunarity)
+    colour = request.form['colours']
+    colours_json = json.loads(colour)
+
+    noise_params = {
+        "base_frequency": float(request.form['base_frequency']),
+        "cell_size": int(request.form['cell_size']),
+        "noise_octaves": int(request.form['noise_octaves']),
+        "noise_persistance": float(request.form['noise_persistance']),
+        "noise_lacunarity": float(request.form['noise_lacunarity'])
+    }
+    if texture_type == 'noise':
+        thresholds = [
+            float(request.form['threshold_1']),
+            float(request.form['threshold_2']),
+            float(request.form['threshold_3']),
+            float(request.form['threshold_4']),
+            float(request.form['threshold_5'])
+        ]
+
+        new_img = proc_tex.noise_texture([tile_width, tile_height], colours_json, thresholds, noise_params)
+    else:
+        mortar_colour = request.form['mortar_colour']
+        brick_width = int(request.form['brick_width'])
+        brick_height = int(request.form['brick_height'])
+        mortar_size = int(request.form['mortar_size'])
+        threshold = float(request.form['threshold'])
+
+        new_img = proc_tex.generate_brick_texture([tile_width, tile_height],
+                                                  colours_json, 
+                                                  noise_params,
+                                                  [brick_width, brick_height],
+                                                  mortar_size,
+                                                  ImageColor.getrgb(mortar_colour),
+                                                  threshold)
+    
     img_io = BytesIO()
     new_img.save(img_io, 'PNG')
     img_io.seek(0)

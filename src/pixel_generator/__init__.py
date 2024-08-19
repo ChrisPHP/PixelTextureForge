@@ -92,8 +92,20 @@ class PixelGenerator:
         result_image = image_to_seamless(img, overlap=0.1)
         return result_image
 
+    def get_colour_palette(self, img_array, num_colours=6):
+        pixels = img_array.reshape((-1,4))
+        rand_int = np.random.randint(0, 2**32)
+        kmeans = KMeans(n_clusters=num_colours, random_state=rand_int)
+        kmeans.fit(pixels)
+        colours = kmeans.cluster_centers_.astype(int)
+
+        labels = kmeans.predict(pixels)
+        quantized = colours[labels]
+
+        return quantized, colours
+
     def process_image(self, img, num_colours, pixel_size):
-        img = img.convert('RGB')
+        img = img.convert('RGBA')
         width, height = img.size
 
         new_width = width - (width % pixel_size)
@@ -101,17 +113,7 @@ class PixelGenerator:
         img = img.resize((new_width, new_height))
 
         img_array = np.array(img)
-
-        pixels = img_array.reshape((-1,4))
-
-        rand_int = np.random.randint(0, 2**32)
-        kmeans = KMeans(n_clusters=num_colours, random_state=rand_int)
-        kmeans.fit(pixels)
-
-        colours = kmeans.cluster_centers_.astype(int)
-
-        labels = kmeans.predict(pixels)
-        quantized = colours[labels]
+        quantized, _ = self.get_colour_palette(img_array, num_colours)
 
         quantized = quantized.reshape(img_array.shape)
         for i in range(0, new_height, pixel_size):

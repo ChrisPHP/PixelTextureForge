@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
@@ -75,7 +78,8 @@
                         <p>Palette Mode:</p>
                         <select id="paletteMode" name="paletteMode">
                             <option value="monochrome">Monochrome</option>
-                            <option value="monochrome-light">Monochrome Dark</option>
+                            <option value="monochrome-light">Monochrome Light</option>
+                            <option value="monochrome-dark">Monochrome Dark</option>
                             <option value="analogic">Analogic</option>
                             <option value="complement">Complement</option>
                             <option value="analogic-complement">Analogic Complement</option>
@@ -99,19 +103,44 @@
                     <button id="wangBorders" class="pure-button pure-button-primary">Run</button>
                     <li class="pure-menu-item">
                         <p>Border Style:</p>
-                        <select id="borderStyle" name="borderStyle">
+                        <select id="borderStyle" name="borderStyle">    
                             <option value="flat">flat</option>
-                            <option value="brick">Brick</option>
+                            <option value="brickborder">Brick</option>
+                            <option value="noise">Noise Flat</option>
+                            <option value="noise_mask">Noise Mask</option>
                         </select>
                     </li>
                     <li class="pure-menu-item">
                         <p>Border Size:</p>
                         <input type="number" id="borderSize" name="borderSize" value="75" min="1" >
                     </li>
+                    <div id="brickborder-details">
+                        <li class="pure-menu-item">
+                            <p>Percent Width</p>
+                            <input type="number" id="brickBorderWidth" name="brickBorderWidth" value="50" min="1" max="100">
+                        </li>
+                        <li class="pure-menu-item">
+                            <p>Percent Height</p>
+                            <input type="number" id="brickBorderHeight" name="brickBorderHeight" value="50" min="1" max="100">
+                        </li>
+                        <li class="pure-menu-item">
+                            <p>Mortar Percent</p>
+                            <input type="number" id="mortarBorder" name="mortarBorder" value="10" min="1" max="100">
+                        </li>
+                    </div>
                 </div>
                 <div id="procedural-sidebar">
                     <h2>Generate Texture</h2>
                     <button id="generateNoise" class="pure-button pure-button-primary">Generate Noise</button>
+                    <h2>Image height</h2>
+                    <li class="pure-menu-item">
+                        <p>Tile Width:</p>
+                        <input type="number" id="noiseWidth" name="noiseWidth" value="100" min="1">                   
+                    </li>
+                    <li class="pure-menu-item">
+                        <p>Tile Height:</p>
+                        <input type="number" id="noiseHeight" name="noiseHeight" value="100" min="1">
+                    </li>
                     <li class="pure-menu-item">
                         <p>Frequency:</p>
                         <input type="number" id="baseFrequency" name="baseFrequency" step="0.1" value="0.5" max="100">
@@ -132,6 +161,56 @@
                         <p>Lacunarity:</p>
                         <input type="number" id="noiseLacunarity" name="noiseLacunarity" step="0.1" value="2.0" max="100">
                     </li>
+                    <li class="pure-menu-item">
+                        <p>Palette Mode:</p>
+                        <select id="paletteNoise" name="paletteNoise">
+                            <option value="monochrome">Monochrome</option>
+                            <option value="monochrome-light">Monochrome Light</option>
+                            <option value="monochrome-dark">Monochrome Dark</option>
+                            <option value="analogic">Analogic</option>
+                            <option value="complement">Complement</option>
+                            <option value="analogic-complement">Analogic Complement</option>
+                            <option value="triad">Triad</option>
+                            <option value="quad">Quad</option>
+                        </select>
+                    </li>
+                    <li class="pure-menu-item">
+                        <p>Colour:</p>
+                        <input class="colour-input" type="color" id="noiseChosenColour" name="noiseChosenColour" value="#ff0000">
+                    </li>
+                    <p>Type of Texture</p>
+                    <li class="pure-menu-item">
+                        <select id="textureOption" name="textureOption">
+                            <option value="noise">Simplex Noise</option>
+                            <option value="brick">Brick</option>
+                        </select>
+                    </li>
+                    <div id="brick-details">
+                        <h2>Brick Info</h2>
+                        <p>Mortar Colour</p>
+                        <input class="colour-input" type="color" id="mortarChosenColour" name="mortarChosenColour" value="#ff0000">
+                        <p>Brick Width:</p>
+                        <input type="number" id="brickWidth" name="brickWidth" value="10" min="1">
+                        <p>Brick Height:</p>
+                        <input type="number" id="brickHeight" name="brickHeight" value="10" min="1">
+                        <p>Mortar Size:</p>
+                        <input type="number" id="mortarSize" name="mortarSize" value="1" min="1">
+                        <p>Colour Threshold:</p>
+                        <input type="number" id="brickColourThreshold" name="brickColourThreshold" step="0.1" value="0.5" min="1.0">
+                    </div>
+                    <div id="noise-details">
+                        <h2>Colour Threshold</h2>
+                        <p>Colour 1 Threshold:</p>
+                        <input type="number" id="colour1Threshold" name="colour1Threshold" step="0.1" value="0.1" max="1">
+                        <p>Colour 2 Threshold:</p>
+                        <input type="number" id="colour2Threshold" name="colour2Threshold" step="0.1" value="0.2" max="1">
+                        <p>Colour 3 Threshold:</p>
+                        <input type="number" id="colour3Threshold" name="colour3Threshold" step="0.1" value="0.3" max="1">
+                        <p>Colour 4 Threshold:</p>
+                        <input type="number" id="colour4Threshold" name="colour4Threshold" step="0.1" value="0.4" max="1">
+                        <p>Colour 5 Threshold:</p>
+                        <input type="number" id="colour5Threshold" name="colour5Threshold" step="0.1" value="0.5" max="1">
+                    </div>
                 </div>
                 <div id="seamless-sidebar">
                     <h2>Find best part of image to tile:</h2>
