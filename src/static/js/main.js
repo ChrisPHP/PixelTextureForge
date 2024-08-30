@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const img = document.createElement('img');
             img.src = e.target.result;
             img.id = img_id;
+            img.className = "pure-img";
             const container = document.getElementById(div_id);
             container.innerHTML = ''; // Clear previous image
             container.appendChild(img);
