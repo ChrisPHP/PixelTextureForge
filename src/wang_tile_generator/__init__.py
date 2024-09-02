@@ -282,8 +282,7 @@ class WangTilesGenerator:
 
     def border_style(self, available_width, available_height, div_height, div_width, x, y, colour, border_type):
         if border_type == "brickborder":
-            #return brickborder.brick_border(available_width, available_height, div_width,div_height, x, y, colour, self.border_dict)
-            return brickborder.brick_border_test(available_width, available_height, div_width,div_height, x, y, colour, self.border_dict)
+            return brickborder.brick_border(available_width, available_height, div_width,div_height, x, y, colour, self.border_dict)
         elif border_type == 'noise':
             return self.input_border_img[x,y]
         else:
