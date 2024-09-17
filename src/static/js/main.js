@@ -278,6 +278,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function fetch_command(route_name, formData) {
+        loader = document.getElementById('loader');
+        loader.style.display = 'block';
+        
         fetch(route_name, {
             method: 'POST',
             body: formData,
@@ -290,10 +293,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 outputFile = new File([blob], 'noise.png');
             }
             file_reader(outputFile, 'uploadedImage', 'outputImage')
+            loader.style.display = 'none';
         })
         .catch(error => {
             console.error('Error:', error);
             document.getElementById('outputImage').textContent = 'An error occurred during upload.';
+            loader.style.display = 'none';
         });
     }
 });
