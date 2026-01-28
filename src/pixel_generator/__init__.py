@@ -19,7 +19,6 @@ class PixelGenerator:
   
                 img_array[y, x] = (new_r, new_g, new_b, a)
 
-
         return Image.fromarray(img_array.astype('uint8'))
 
     def get_avg_colour(self, img):
@@ -94,7 +93,7 @@ class PixelGenerator:
 
     def get_colour_palette(self, img_array, num_colours=6):
         pixels = img_array.reshape((-1,4))
-        rand_int = np.random.randint(0, 2**32)
+        rand_int = np.random.randint(0, 2**31)
         kmeans = KMeans(n_clusters=num_colours, random_state=rand_int)
         kmeans.fit(pixels)
         colours = kmeans.cluster_centers_.astype(int)

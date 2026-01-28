@@ -37,10 +37,13 @@
   max-height: 80%;
 }
 
+.active-selection {
+  border: #333 solid 3px ;
+}
+
 .container img {
   object-fit: contain;
   object-position: center;
-  image-rendering: pixelated;
   width: 100%;
   height: 100%;
 }
@@ -52,6 +55,10 @@
 
 .colour-input {
   width: 100%;
+}
+
+.hidden {
+  display: none;
 }
 
 #loader {
@@ -67,6 +74,7 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
 
 /* Sidebar content */
 #pixel-sidebar {

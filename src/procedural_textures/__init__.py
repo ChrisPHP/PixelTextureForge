@@ -32,7 +32,7 @@ class ProceduralTextures:
         scale = 1
         width = img_size[0]
         height = img_size[1]
-        rand_int = np.random.randint(0, 2**32)
+        rand_int = np.random.randint(0, 2**31)
         opensimplex.seed(rand_int)
         result = np.zeros((width, height))
 
