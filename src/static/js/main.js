@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('image', selectedFile);
             formData.append('use_best', 'false');
 
-            fetch_command('/seamless', formData);
+            fetch_command('/textures/seamless', formData);
         }  
     });
 
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('tile_width', document.getElementById('tileWidth').value);
             formData.append('tile_height', document.getElementById('tileHeight').value);
 
-            fetch_command('/seamless', formData);
+            fetch_command('/textures/seamless', formData);
         }
     });
 
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('num_colours', document.getElementById('numColours').value)
             formData.append('pixel_size', document.getElementById('pixelSize').value)
 
-            fetch_command('/upload', formData);
+            fetch_command('/images/pixelate', formData);
         }
     });
 
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('green_shift', document.getElementById('greenShift').value)
             formData.append('blue_shift', document.getElementById('blueShift').value)
 
-            fetch_command('/colour_shift', formData);
+            fetch_command('/colours/shift', formData);
         }
     });
 
@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (selectedFile) {
             const formData = new FormData();
             formData.append('image', selectedFile);
-            fetch_command('/get_colour_palette', formData);
+            fetch_command('/colours/extract', formData);
         }
     });
 
@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const palette = await colour_palette_fetch(url);
         formData.append('colours', palette);
 
-        fetch_command('/procedural', formData);
+        fetch_command('/textures/procedural', formData);
     });
 
     document.getElementById('pixelSize').addEventListener('change', function(event) {
@@ -196,14 +196,14 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append('width', rounded_width);
         formData.append('height', rounded_height);
 
-        fetch_command('/nearest_neighbour', formData);
+        fetch_command('/images/resize', formData);
     });
 
     document.getElementById('wangTiles').addEventListener('click', function(event) {        
         const formData = new FormData();
         formData.append('image', selectedFile);
 
-        fetch_command('/wang_tiles', formData);
+        fetch_command('/wang-tiles', formData);
     });
 
     document.getElementById('wangBorders').addEventListener('click', async function(event) {        
@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('noise_lacunarity', document.getElementById('noiseLacunarity').value);
         }
 
-        fetch_command('/wang_borders', formData);
+        fetch_command('/wang-tiles/borders', formData);
     });
 
     document.getElementById('colourPalette').addEventListener('click', async function(event) {        
@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append('colours', palette);
         formData.append('factor', document.getElementById('paletteFactor').value);
 
-        fetch_command('/colour_palette', formData);
+        fetch_command('/colours/palette', formData);
     });
 
     async function colour_palette_fetch(url) {
