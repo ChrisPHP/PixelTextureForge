@@ -166,7 +166,7 @@ const OPERATIONS = {
             formData.append('colours', palette);
             formData.append('factor', document.getElementById('paletteFactor').value);
 
-            await fetchCommand('/colour_palette', formData, file);
+            await fetchCommand('/colours/palette', formData, file);
         },
     },
 }
