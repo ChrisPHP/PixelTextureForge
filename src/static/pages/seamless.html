@@ -1,0 +1,20 @@
+<ul class="pure-menu-list">
+    <div id="seamless-sidebar">
+        <h2>Find best part of image to tile:</h2>
+        <li class="pure-menu-item">
+            <button id="cropImage" hx-on:click="cropImage()" class="pure-button pure-button-primary">Run</button>
+        </li>
+        <li class="pure-menu-item">
+            <p>Tile Width:</p>
+            <input type="number" id="tileWidth" name="tileWidth" value="100" min="1">
+        </li>
+        <li class="pure-menu-item">
+            <p>Tile Height:</p>
+            <input type="number" id="tileHeight" name="tileHeight" value="100" min="1">
+        </li>
+        <h2>Create chosen into seamless</h2>
+        <li class="pure-menu-item">
+            <button id="makeSeamless" hx-on:click="makeSeamless()" class="pure-button pure-button-primary">Run</button>
+        </li>
+    </div>
+</ul>

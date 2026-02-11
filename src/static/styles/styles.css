@@ -75,28 +75,6 @@
   100% { transform: rotate(360deg); }
 }
 
-
-/* Sidebar content */
-#pixel-sidebar {
-  display: block;
-}
-
-#wang-sidebar {
-  display: none;
-}
-
-#seamless-sidebar {
-  display: none;
-}
-
-#procedural-sidebar {
-  display: none;
-}
-
-#colours-sidebar {
-  display: none;
-}
-
 /* procedural content */
 #brick-details {
   display: none;
