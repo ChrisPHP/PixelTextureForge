@@ -1,12 +1,12 @@
 <ul class="pure-menu-list">
     <div id="wang-sidebar">
         <h2>Generate Wang tileset</h2>
-        <button id="wangTiles" class="pure-button pure-button-primary">Run</button>
+        <button id="wangTiles" hx-on:click="generateWangTiles()" class="pure-button pure-button-primary">Run</button>
         <h2>Generate Borders</h2>
-        <button id="wangBorders" class="pure-button pure-button-primary">Run</button>
+        <button id="wangBorders" hx-on:click="generateWangBorders()" class="pure-button pure-button-primary">Run</button>
         <li class="pure-menu-item">
             <p>Border Style:</p>
-            <select id="borderStyle" name="borderStyle">    
+            <select id="borderStyle" name="borderStyle" onchange="onBorderStyleChange(event)">
                 <option value="flat">flat</option>
                 <option value="brickborder">Brick</option>
                 <option value="noise">Noise Flat</option>

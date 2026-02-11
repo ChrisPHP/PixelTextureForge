@@ -74,12 +74,12 @@
             <div class="pure-g">
                 <div class="pure-u-1-2">
                     <form id="imageInputForm">
-                        <input type="file" id="imageUpload" accept="image/*" class="pure-button" multiple>
+                        <input type="file" id="imageUpload" accept="image/*" class="pure-button" multiple onchange="onImageUpload(event)">
                     </form>
-                    <button id="imageClear" class="pure-button">Clear</button>
+                    <button id="imageClear" hx-on:click="clearImages()" class="pure-button">Clear</button>
                 </div>
                 <div class="pure-u-1-2">
-                    <button id="setOutputAsInput" class="pure-button pure-button-primary">Use output as input</button>
+                    <button id="setOutputAsInput" hx-on:click="useOutputAsInput()" class="pure-button pure-button-primary">Use output as input</button>
                 </div>
             </div>
             <div class="pure-g">
@@ -96,5 +96,6 @@
             </div>
         </div>
     </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

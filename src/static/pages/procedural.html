@@ -1,11 +1,11 @@
 <ul class="pure-menu-list">
     <div id="procedural-sidebar">
         <h2>Generate Texture</h2>
-        <button id="generateNoise" class="pure-button pure-button-primary">Generate Noise</button>
+        <button id="generateNoise" hx-on:click="generateNoise()" class="pure-button pure-button-primary">Generate Noise</button>
         <h2>Image height</h2>
         <li class="pure-menu-item">
             <p>Tile Width:</p>
-            <input type="number" id="noiseWidth" name="noiseWidth" value="100" min="1">                   
+            <input type="number" id="noiseWidth" name="noiseWidth" value="100" min="1">
         </li>
         <li class="pure-menu-item">
             <p>Tile Height:</p>
@@ -50,7 +50,7 @@
         </li>
         <p>Type of Texture</p>
         <li class="pure-menu-item">
-            <select id="textureOption" name="textureOption">
+            <select id="textureOption" name="textureOption" onchange="onTextureOptionChange(event)">
                 <option value="noise">Simplex Noise</option>
                 <option value="brick">Brick</option>
             </select>

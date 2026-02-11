@@ -184,29 +184,19 @@ let img_width, img_height = 0
 function toggleDetails(activeId) {
     detailsId.forEach(id => {
         const details = document.getElementById(`${id}-details`);
-        details.style.display = id === activeId ? 'block' : 'none';
+        if (details) {
+            details.style.display = id === activeId ? 'block' : 'none';
+        }
     });
 }
 
-document.getElementById('textureOption').addEventListener('change', function(event) {
-   toggleDetails(event.target.value);
-});
-
-document.getElementById('borderStyle').addEventListener('change', function(event) {
+function onTextureOptionChange(event) {
     toggleDetails(event.target.value);
- });
-
-function toggleSidebar(activeId) {
-    sidebarIds.forEach(id => {
-        const sidebar = document.getElementById(`${id}-sidebar`);
-        sidebar.style.display = id === activeId ? 'block' : 'none';
-    });
 }
 
-sidebarIds.forEach(id => {
-    const menuOpen = document.getElementById(`${id}-menu-open`);
-    menuOpen.addEventListener('click', () => toggleSidebar(id));
-});
+function onBorderStyleChange(event) {
+    toggleDetails(event.target.value);
+}
 
 // helper function to convert file/blob objects to base64 strings
 async function blobToBase64(blob) {
@@ -409,16 +399,16 @@ function redrawPreviews(clearPrevious, forOutput = false) {
     }
 }
 
-document.getElementById('imageClear').addEventListener('click', function(event) {
-    inputPreviewContainer.innerHTML = '';
-    imageInputForm.reset();
+function clearImages() {
+    document.getElementById('inputPreviewContainer').innerHTML = '';
+    document.getElementById('imageInputForm').reset();
     updateSelectedFile(null);
     activeFiles = {};
-});
+}
 
-document.getElementById('imageUpload').addEventListener('change', async function(event) {
-    inputPreviewContainer.innerHTML = '';
-    imageClear.classList.remove('hidden');
+async function onImageUpload(event) {
+    document.getElementById('inputPreviewContainer').innerHTML = '';
+    document.getElementById('imageClear').classList.remove('hidden');
     clearActiveSelections();
 
     let fileCt = event.target.files.length;
@@ -428,72 +418,72 @@ document.getElementById('imageUpload').addEventListener('change', async function
     }
 
     redrawPreviews(false);
-});
+}
 
-document.getElementById("setOutputAsInput").addEventListener('click', function() {
-    imageClear.click()
+function useOutputAsInput() {
+    clearImages();
     for (file in dataBuffers) {
         activeFiles[file] = dataBuffers[file];
     }
     redrawPreviews(false);
-});
+}
 
-document.getElementById("makeSeamless").addEventListener('click', function() {
+function makeSeamless() {
     workQueue = ["SEAMLESS"];
     dispatchWorkQueues();
-});
+}
 
-document.getElementById('cropImage').addEventListener('click', function(event) {
+function cropImage() {
     workQueue = ["CROP_IMAGE"];
     dispatchWorkQueues();
-});
+}
 
-document.getElementById('uploadButton').addEventListener('click', function(event) {
+function uploadImage() {
     workQueue = ["UPLOAD"];
     dispatchWorkQueues();
-});
+}
 
-document.getElementById('colourShift').addEventListener('click', function(event) {
+function colourShift() {
     workQueue = ["COLOUR_SHIFT"];
     dispatchWorkQueues();
-});
+}
 
-document.getElementById('generateNoise').addEventListener('click', async function(event) {
+function generateNoise() {
     workQueue = ["PROCEDURAL"];
     dispatchWorkQueues();
-});
+}
 
-document.getElementById('pixelSize').addEventListener('change', function(event) {
+function onPixelSizeChange() {
     pixel_size = document.getElementById('pixelSize').value;
     rounded_width = Math.round(img_width/pixel_size);
     rounded_height = Math.round(img_height/pixel_size);
     document.getElementById('dimensions-label').innerHTML = `${rounded_width}x${rounded_height}`;
-});
+}
 
-document.getElementById('scaleDown').addEventListener('click', function(event) {
+function scaleDown() {
     workQueue = ["NEAREST_NEIGHBOUR"];
     dispatchWorkQueues();
-});
+}
 
-document.getElementById('wangTiles').addEventListener('click', function(event) {
+function generateWangTiles() {
     workQueue = ["WANG_TILES"];
     dispatchWorkQueues();
-});
+}
 
-document.getElementById('wangBorders').addEventListener('click', async function(event) {
+function generateWangBorders() {
     workQueue = ["WANG_BORDERS"];
     dispatchWorkQueues();
-});
+}
 
-document.getElementById('colourPalette').addEventListener('click', async function(event) {
+function applyColourPalette() {
     workQueue = ["COLOUR_PALETTE"];
     dispatchWorkQueues();
-});
+}
 
-document.getElementById('uploadAndScale').addEventListener('click', async function(event) {
+function uploadAndScale() {
     workQueue = ["UPLOAD", "NEAREST_NEIGHBOUR"];
     dispatchWorkQueues();
-});
+}
 
 async function colourPaletteFetch(url) {
     palette = []
