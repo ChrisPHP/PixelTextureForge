@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 import os
 
-from routes import images_bp, colours_bp, textures_bp, wang_tiles_bp
+from routes import images_bp, colours_bp, textures_bp, wang_tiles_bp, pages_bp
 
 app = Flask(__name__, template_folder='static')
 
@@ -19,7 +19,7 @@ app.register_blueprint(images_bp)
 app.register_blueprint(colours_bp)
 app.register_blueprint(textures_bp)
 app.register_blueprint(wang_tiles_bp)
-
+app.register_blueprint(pages_bp)
 
 @app.route('/')
 def home():

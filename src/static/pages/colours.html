@@ -1,0 +1,41 @@
+<ul class="pure-menu-list">
+    <div id="colours-sidebar">
+        <h2>Shift Colour of image</h2>
+        <button id="colourShift" class="pure-button pure-button-primary">Shift</button>
+        <li class="pure-menu-item">
+            <p>Red:</p>
+            <input type="number" id="redShift" name="redShift" step="0.1" value="1.0" min="0" max="100">
+        </li>
+        <li class="pure-menu-item">
+            <p>Green:</p>
+            <input type="number" id="greenShift" name="greenShift" step="0.1" value="1.0" min="0" max="100">
+        </li>
+        <li class="pure-menu-item">
+            <p>Green:</p>
+            <input type="number" id="blueShift" name="blueShift" step="0.1" value="1.0" min="0" max="100">
+        </li>    
+        <h2>Apply Colour Palette</h2>
+        <button id="colourPalette" class="pure-button pure-button-primary">Apply</button>
+        <li class="pure-menu-item">
+            <p>Palette Mode:</p>
+            <select id="paletteMode" name="paletteMode">
+                <option value="monochrome">Monochrome</option>
+                <option value="monochrome-light">Monochrome Light</option>
+                <option value="monochrome-dark">Monochrome Dark</option>
+                <option value="analogic">Analogic</option>
+                <option value="complement">Complement</option>
+                <option value="analogic-complement">Analogic Complement</option>
+                <option value="triad">Triad</option>
+                <option value="quad">Quad</option>
+            </select>
+        </li>
+        <li class="pure-menu-item">
+            <p>Colour:</p>
+            <input class="colour-input" type="color" id="chosenColour" name="chosenColour" value="#ff0000">
+        </li>
+        <li class="pure-menu-item">
+            <p>Factor:</p>
+            <input type="number" id="paletteFactor" name="paletteFactor" step="0.1" value="1.0" min="0.0", max="1.0">
+        </li> 
+    </div>
+</ul>

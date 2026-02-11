@@ -1,4 +1,3 @@
-const sidebarIds = ['seamless', 'wang', 'pixel', 'procedural', 'colours'];
 const detailsId = ['brick', 'brickborder', 'noise'];
 const OPERATIONS = {
     "SEAMLESS": {
